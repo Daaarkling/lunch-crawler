@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project name="LunchCrawler" default="check">
+
+	<target name="check" depends="
+		composer,
+		lint,
+		phpcs,
+		phpstan
+	"/>
+
+	<target name="composer">
+		<exec
+				executable="composer"
+				logoutput="true"
+				passthru="true"
+				checkreturn="true"
+		>
+			<arg value="install"/>
+		</exec>
+	</target>
+
+	<target name="lint">
+		<exec
+				executable="bin/parallel-lint"
+				logoutput="true"
+				passthru="true"
+				checkreturn="true"
+		>
+			<arg path="app" />
+		</exec>
+	</target>
+
+	<target name="phpcs">
+		<exec
+				executable="bin/phpcs"
+				logoutput="true"
+				passthru="true"
+				checkreturn="true"
+		>
+			<arg value="--standard=build/phpcs.xml"/>
+			<arg value="--ignore=*/data/*"/>
+			<arg path="app"/>
+		</exec>
+	</target>
+
+	<target name="phpcs-fix">
+		<exec
+				executable="bin/phpcbf"
+				logoutput="true"
+				passthru="true"
+				checkreturn="true"
+		>
+			<arg value="--standard=build/phpcs.xml"/>
+			<arg path="app"/>
+		</exec>
+	</target>
+
+	<target name="phpstan">
+		<exec
+				executable="bin/phpstan"
+				logoutput="true"
+				passthru="true"
+				checkreturn="true"
+		>
+			<arg value="analyse"/>
+			<arg value="-l"/>
+			<arg value="7"/>
+			<arg value="-c"/>
+			<arg path="build/phpstan.neon"/>
+			<arg path="app"/>
+		</exec>
+	</target>
+
+</project>

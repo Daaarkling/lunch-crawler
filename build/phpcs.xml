@@ -1,0 +1,96 @@
+<?xml version="1.0"?>
+<ruleset name="Karlin-lunch-crawler">
+	<arg name="extensions" value="php"/>
+	<arg name="tab-width" value="4"/>
+	<arg value="s"/>
+	<arg value="p"/>
+
+	<rule ref="../vendor/consistence/coding-standard/Consistence/ruleset.xml">
+		<exclude name="Consistence.Exceptions.ExceptionDeclaration.IncorrectExceptionDirectory"/>
+		<exclude name="Consistence.Exceptions.ExceptionDeclaration.NotChainable"/>
+		<exclude name="Generic.Arrays.ArrayIndent"/><!-- buggy -->
+		<exclude name="Generic.CodeAnalysis.EmptyStatement.DetectedIf"/><!-- allow empty if statements - usually with a comment -->
+		<exclude name="Generic.CodeAnalysis.EmptyStatement.DetectedElse"/><!-- allow empty else statements - usually with a comment -->
+		<exclude name="Generic.CodeAnalysis.EmptyStatement.DetectedElseif"/><!-- allow empty elseif statements - usually with a comment -->
+		<exclude name="PEAR.WhiteSpace.ObjectOperatorIndent.Incorrect"/><!-- je potřeba odsazení u formů a dibi fluent -->
+		<exclude name="PSR2.Methods.FunctionCallSignature.CloseBracketLine"/><!-- string rozdělený na více řádků, typicky SQL -->
+		<exclude name="PSR2.Methods.FunctionCallSignature.MultipleArguments"/><!-- dibi syntaxe využívá argumentů "v textu" -->
+		<exclude name="PSR2.Methods.FunctionCallSignature.SpaceBeforeCloseBracket"/><!-- conflicts with our way of writing multiline SQL queries -->
+	</rule>
+	<rule ref="../vendor/slevomat/coding-standard/SlevomatCodingStandard/ruleset.xml">
+		<exclude name="SlevomatCodingStandard.Classes.SuperfluousAbstractClassNaming.SuperfluousPrefix"/>
+		<exclude name="SlevomatCodingStandard.Classes.SuperfluousInterfaceNaming.SuperfluousSuffix"/>
+		<exclude name="SlevomatCodingStandard.Classes.SuperfluousExceptionNaming"/>
+		<exclude name="SlevomatCodingStandard.Commenting.DisallowOneLinePropertyDocComment"/>
+		<exclude name="SlevomatCodingStandard.Commenting.DocCommentSpacing.IncorrectLinesCountBetweenDifferentAnnotationsTypes"/>
+		<exclude name="SlevomatCodingStandard.ControlStructures.EarlyExit"/>
+		<exclude name="SlevomatCodingStandard.ControlStructures.RequireYodaComparison"/>
+		<exclude name="SlevomatCodingStandard.Namespaces.FullyQualifiedGlobalConstants"/>
+		<exclude name="SlevomatCodingStandard.Namespaces.FullyQualifiedGlobalFunctions"/>
+		<exclude name="SlevomatCodingStandard.Namespaces.UseOnlyWhitelistedNamespaces"/>
+		<exclude name="SlevomatCodingStandard.Namespaces.FullyQualifiedExceptions"/>
+		<exclude name="SlevomatCodingStandard.Namespaces.FullyQualifiedClassNameAfterKeyword"/>
+	</rule>
+
+	<rule ref="SlevomatCodingStandard.Classes.UnusedPrivateElements" />
+	<rule ref="SlevomatCodingStandard.Commenting.ForbiddenAnnotations">
+		<properties>
+			<property name="forbiddenAnnotations" type="array" value="
+				@author,
+				@created,
+				@copyright,
+				@license,
+				@package,
+				@throws,
+				@version,
+			"/>
+		</properties>
+	</rule>
+	<rule ref="SlevomatCodingStandard.Files.TypeNameMatchesFileName">
+		<properties>
+			<property name="rootNamespaces" type="array" value="
+				app => LunchCrawler,
+				tests => LunchCrawler,
+			"/>
+		</properties>
+	</rule>
+	<rule ref="SlevomatCodingStandard.Namespaces.AlphabeticallySortedUses">
+		<properties>
+			<property name="caseSensitive" value="false"/>
+		</properties>
+	</rule>
+	<rule ref="SlevomatCodingStandard.Namespaces.ReferenceUsedNamesOnly">
+		<properties>
+			<property name="fullyQualifiedKeywords" type="array" value=""/>
+			<property name="allowFullyQualifiedExceptions" value="false"/>
+			<property name="allowFullyQualifiedNameForCollidingClasses" value="true"/>
+		</properties>
+	</rule>
+	<rule ref="SlevomatCodingStandard.TypeHints.DeclareStrictTypes">
+		<properties>
+			<property name="newlinesCountBetweenOpenTagAndDeclare" value="0"/>
+		</properties>
+	</rule>
+	<rule ref="SlevomatCodingStandard.TypeHints.TypeHintDeclaration">
+		<properties>
+			<property name="traversableTypeHints" type="array" value="
+				Traversable,
+				Generator,
+			"/>
+			<property name="usefulAnnotations" type="array" value="
+				@dataProvider,
+				@deprecated,
+				@internal,
+				@label,
+				@see,
+			"/>
+		</properties>
+	</rule>
+	<rule ref="SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingTraversableReturnTypeHintSpecification">
+		<exclude-pattern>tests/</exclude-pattern><!-- it's useless to add "@return mixed[]" to all data providers -->
+	</rule>
+	<rule ref="Squiz.WhiteSpace.FunctionSpacing.After"/>
+	<rule ref="Squiz.Commenting.FunctionComment">
+		<exclude-pattern>tests/</exclude-pattern><!-- @dataProvider etc. annotations trigger comments check -->
+	</rule>
+</ruleset>

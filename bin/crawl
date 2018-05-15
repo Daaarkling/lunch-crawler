@@ -1,0 +1,15 @@
+#!/usr/bin/env php
+<?php declare(strict_types=1);
+
+use LunchCrawler\RunCommand;
+use Symfony\Component\Console\Application;
+use Tracy\Debugger;
+
+require __DIR__ . '/../vendor/autoload.php';
+
+Debugger::enable(Debugger::DEVELOPMENT, __DIR__ . '/../log');
+Debugger::$strictMode = true;
+
+$app = new Application();
+$app->add(new RunCommand());
+$app->run();

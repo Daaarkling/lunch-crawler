@@ -1,0 +1,11 @@
+/app/Slack/slack.ini
+/log/
+/temp/
+/vendor
+composer.lock
+/bin/parallel-lint
+/bin/phing
+/bin/php-parse
+/bin/phpcs
+/bin/phpcbf
+/bin/phpstan

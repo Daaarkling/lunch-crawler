@@ -31,7 +31,7 @@ final class Globus extends HtmlParseRestaurant
 			$priceSoup = (int) filter_var($prices['priceSoup'], FILTER_SANITIZE_NUMBER_INT);
 			$priceMeal = (int) filter_var($prices['priceDish'], FILTER_SANITIZE_NUMBER_INT);
 
-			$matcherDishes = Matcher::single('//div[@id="main-content"]//div[contains(@class, "et_pb_text_2")]', [
+			$matcherDishes = Matcher::single(sprintf('//div[@id="main-content"]//div[contains(@class, "et_pb_text_%s")]', date('N')), [
 				'soup' => './/p',
 				'meal' => Matcher::multi('.//ol/li'),
 			])->fromHtml();
@@ -44,6 +44,9 @@ final class Globus extends HtmlParseRestaurant
 			foreach ($rawDishes['meal'] as $meal) {
 				$meals[] = new Dish($meal, $priceMeal);
 			}
+
+			// last one is dessert
+			array_pop($meals);
 
 			return Menu::createFromDishes(self::NAME, [$soap], $meals);
 

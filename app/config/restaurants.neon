@@ -1,4 +1,5 @@
 restaurants:
+	- LunchCrawler\Restaurant\PragueKarlin\PetersBurgerPub
 	- LunchCrawler\Restaurant\PragueKarlin\HostinecUTunelu
 	- LunchCrawler\Restaurant\PragueKarlin\Globus
 	- LunchCrawler\Restaurant\PragueKarlin\KarlinskaPivnice

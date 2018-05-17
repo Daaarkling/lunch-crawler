@@ -1,4 +1,4 @@
-/app/Slack/slack.ini
+/app/config/config.local.neon
 /log/
 /temp/
 /vendor

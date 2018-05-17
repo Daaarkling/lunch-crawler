@@ -10,10 +10,10 @@ use Tracy\Debugger;
 class Crawler
 {
 
-	/** @var \Symfony\Component\Console\Helper\ProgressBar */
-	private $progressBar;
+	/** @var \Symfony\Component\Console\Helper\ProgressBar|null */
+	private $progressBar = null;
 
-	public function __construct(ProgressBar $progressBar)
+	public function setProgressBar(ProgressBar $progressBar): void
 	{
 		$progressBar->setFormat('debug');
 		$this->progressBar = $progressBar;
@@ -25,7 +25,9 @@ class Crawler
 	 */
 	public function crawl(array $restaurants): Result
 	{
-		$this->progressBar->start();
+		if ($this->progressBar !== null) {
+			$this->progressBar->start();
+		}
 
 		$menu = [];
 		foreach ($restaurants as $restaurant) {
@@ -40,9 +42,15 @@ class Crawler
 			} catch (RestaurantParseException $e) {
 				Debugger::log($e);
 			}
-			$this->progressBar->advance();
+
+			if ($this->progressBar !== null) {
+				$this->progressBar->advance();
+			}
 		}
-		$this->progressBar->finish();
+
+		if ($this->progressBar !== null) {
+			$this->progressBar->finish();
+		}
 
 		return new Result($menu, count($restaurants));
 	}

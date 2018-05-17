@@ -22,7 +22,9 @@
 		"guzzlehttp/guzzle": "^6.3",
 		"nette/utils": "^3.0",
 		"tracy/tracy": "^2.4",
-		"alek13/slack": "^2.0"
+		"alek13/slack": "^2.0",
+		"nette/di": "^3.0",
+		"nette/bootstrap": "^3.0"
 	},
 	"require-dev": {
 		"consistence/coding-standard": "^3.0",
@@ -31,11 +33,6 @@
 		"phpstan/phpstan": "^0.9",
 		"phpstan/phpstan-strict-rules": "^0.9",
 		"jakub-onderka/php-parallel-lint": "^1.0"
-	},
-	"autoload": {
-		"psr-4": {
-			"LunchCrawler\\":"app/"
-		}
 	},
 	"minimum-stability": "dev"
 }

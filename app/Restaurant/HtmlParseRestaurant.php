@@ -10,9 +10,9 @@ abstract class HtmlParseRestaurant implements Restaurant
 	/** @var \GuzzleHttp\Client */
 	protected $httpClient;
 
-	public function __construct()
+	public function __construct(Client $client)
 	{
-		$this->httpClient = new Client();
+		$this->httpClient = $client;
 	}
 
 }

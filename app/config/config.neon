@@ -1,0 +1,19 @@
+includes:
+	- restaurants.neon
+
+
+services:
+	- GuzzleHttp\Client
+	- LunchCrawler\Crawler
+	- LunchCrawler\Output\OutputHandlerFactory
+
+	runCommand: LunchCrawler\RunCommand
+	application:
+		factory: Symfony\Component\Console\Application
+		setup:
+			- add(@runCommand)
+
+
+extensions:
+	restaurants: LunchCrawler\Extension\RestaurantExtension
+	slack: LunchCrawler\Extension\SlackExtension

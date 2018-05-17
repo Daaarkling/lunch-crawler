@@ -4,7 +4,7 @@ namespace LunchCrawler;
 
 use LunchCrawler\Output\OutputHandlerFactory;
 use LunchCrawler\Output\OutputOptions;
-use LunchCrawler\Restaurant\RestaurantClassLoader;
+use LunchCrawler\Restaurant\RestaurantCollection;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;
@@ -16,6 +16,28 @@ class RunCommand extends Command
 {
 
 	private const OPTION_OUTPUT = 'output';
+
+	/** @var \LunchCrawler\Crawler */
+	private $crawler;
+
+	/** @var \LunchCrawler\Restaurant\RestaurantCollection */
+	private $restaurantCollection;
+
+	/** @var \LunchCrawler\Output\OutputHandlerFactory */
+	private $outputHandlerFactory;
+
+	public function __construct(
+		Crawler $crawler,
+		RestaurantCollection $restaurantCollection,
+		OutputHandlerFactory $outputHandlerFactory
+	)
+	{
+		parent::__construct();
+		$this->crawler = $crawler;
+		$this->restaurantCollection = $restaurantCollection;
+		$this->outputHandlerFactory = $outputHandlerFactory;
+	}
+
 
 	protected function configure(): void
 	{
@@ -37,20 +59,16 @@ class RunCommand extends Command
 		$outputOption = $input->getOption(self::OPTION_OUTPUT);
 		if (!OutputOptions::isValid($outputOption)) {
 			$io->error('Output must be one of these options: ' . implode(', ', OutputOptions::OUTPUTS));
-			return 1;
+			return 2;
 		}
 
-		$restaurantClassLoader = new RestaurantClassLoader();
-		$restaurants = $restaurantClassLoader->load();
+		$progressBar = new ProgressBar($output, $this->restaurantCollection->getCount());
 
-		$progressBar = new ProgressBar($output, count($restaurants));
-
-		$crawler = new Crawler($progressBar);
-		$result = $crawler->crawl($restaurants);
+		$this->crawler->setProgressBar($progressBar);
+		$result = $this->crawler->crawl($this->restaurantCollection->getRestaurants());
 
 		if (!$result->isEmpty()) {
-			$outputHandlerFactory = new OutputHandlerFactory();
-			$outputHandler = $outputHandlerFactory->create($outputOption, $io);
+			$outputHandler = $this->outputHandlerFactory->create($outputOption, $io);
 			$outputHandler->handle($result);
 		}
 
@@ -63,11 +81,11 @@ class RunCommand extends Command
 
 		if ($result->hasErrors()) {
 			$io->error($message);
+			return 1;
 		} else {
 			$io->success($message);
+			return 0;
 		}
-
-		return 0;
 	}
 
 }

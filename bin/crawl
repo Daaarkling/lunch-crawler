@@ -1,15 +1,25 @@
 #!/usr/bin/env php
 <?php declare(strict_types=1);
 
-use LunchCrawler\RunCommand;
+use Nette\Configurator;
 use Symfony\Component\Console\Application;
-use Tracy\Debugger;
 
 require __DIR__ . '/../vendor/autoload.php';
 
-Debugger::enable(Debugger::DEVELOPMENT, __DIR__ . '/../log');
-Debugger::$strictMode = true;
+$configurator = new Configurator();
+$configurator->setDebugMode(true);
+$configurator->enableTracy(__DIR__ . '/../log');
+$configurator->setTimeZone('Europe/Prague');
+$configurator->setTempDirectory(__DIR__ . '/../temp');
+$configurator->createRobotLoader()
+	->addDirectory(__DIR__ . '/../app')
+	->register();
+$configurator->addConfig(__DIR__ . '/../app/config/config.neon');
+$configurator->addConfig(__DIR__ . '/../app/config/config.local.neon');
 
-$app = new Application();
-$app->add(new RunCommand());
-$app->run();
+
+$container = $configurator->createContainer();
+
+/** @var \Symfony\Component\Console\Application $application */
+$application = $container->getByType(Application::class);
+$application->run();

@@ -2,18 +2,24 @@
 
 namespace LunchCrawler\Output;
 
-use LunchCrawler\Slack\SlackFactory;
+use Maknz\Slack\Client;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 class OutputHandlerFactory
 {
 
+	/** @var \Maknz\Slack\Client */
+	private $slackClient;
+
+	public function __construct(Client $slackClient)
+	{
+		$this->slackClient = $slackClient;
+	}
+
 	public function create(string $option, SymfonyStyle $io): OutputHandler
 	{
 		if ($option === OutputOptions::SLACK) {
-			$slackIniFile = __DIR__ . '/../Slack/slack.ini';
-			$slackFactory = new SlackFactory();
-			$outputHandler = new SlackOutputHandler($slackFactory->create($slackIniFile));
+			$outputHandler = new SlackOutputHandler($this->slackClient);
 
 		} elseif ($option === OutputOptions::CONSOLE) {
 			$outputHandler = new ConsoleOutputHandler($io);

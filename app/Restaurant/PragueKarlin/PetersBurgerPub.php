@@ -7,17 +7,14 @@ use LunchCrawler\Restaurant\ZomatoRestaurantLoader;
 final class PetersBurgerPub extends ZomatoRestaurantLoader
 {
 
-	private const ID = 16506740;
-	private const NAME = 'Peter\'s Burger Pub';
-
 	public function getRestaurantId(): int
 	{
-		return self::ID;
+		return 16506740;
 	}
 
 	public function getName(): string
 	{
-		return self::NAME;
+		return 'Peter\'s Burger Pub';
 	}
 
 }

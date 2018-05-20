@@ -2,20 +2,19 @@
 
 namespace LunchCrawler\Restaurant\PragueKarlin;
 
-use LunchCrawler\Restaurant\Menu\Menu;
-use LunchCrawler\Restaurant\Restaurant;
-use LunchCrawler\Restaurant\RestaurantLoader;
+use LunchCrawler\Restaurant\ZomatoRestaurantLoader;
 
-final class HostinecUTunelu implements RestaurantLoader
+final class HostinecUTunelu extends ZomatoRestaurantLoader
 {
 
-	private const MENU_URL = 'http://www.utunelu.cz/denni_menu.pdf';
-	private const NAME = 'Hostinec U Tunelu';
-
-	public function loadRestaurant(): Restaurant
+	public function getRestaurantId(): int
 	{
-		$menu = Menu::createFromUrl(self::MENU_URL);
-		return new Restaurant(self::NAME, $menu);
+		return 16524768;
+	}
+
+	public function getName(): string
+	{
+		return 'Hostinec U Tunelu';
 	}
 
 }

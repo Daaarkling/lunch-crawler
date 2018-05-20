@@ -4,7 +4,7 @@ namespace LunchCrawler\Restaurant;
 
 use GuzzleHttp\Client;
 
-abstract class HtmlParseRestaurant implements Restaurant
+abstract class HtmlParseRestaurantLoader implements RestaurantLoader
 {
 
 	/** @var \GuzzleHttp\Client */

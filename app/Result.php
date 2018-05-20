@@ -5,33 +5,33 @@ namespace LunchCrawler;
 class Result
 {
 
-	/** @var \LunchCrawler\Restaurant\Menu\Menu[] */
-	private $menu;
+	/** @var \LunchCrawler\Restaurant\Restaurant[] */
+	private $restaurants;
 
 	/** @var int */
 	private $totalAmount;
 
 	/**
-	 * @param \LunchCrawler\Restaurant\Menu\Menu[] $menu
+	 * @param \LunchCrawler\Restaurant\Restaurant[] $restaurants
 	 * @param int $totalAmount
 	 */
-	public function __construct(array $menu, int $totalAmount)
+	public function __construct(array $restaurants, int $totalAmount)
 	{
-		$this->menu = $menu;
+		$this->restaurants = $restaurants;
 		$this->totalAmount = $totalAmount;
+	}
+
+	/**
+	 * @return \LunchCrawler\Restaurant\Restaurant[]
+	 */
+	public function getRestaurants(): array
+	{
+		return $this->restaurants;
 	}
 
 	public function getNumberOfFailed(): int
 	{
-		return $this->totalAmount - count($this->menu);
-	}
-
-	/**
-	 * @return \LunchCrawler\Restaurant\Menu\Menu[]
-	 */
-	public function getMenu(): array
-	{
-		return $this->menu;
+		return $this->totalAmount - count($this->restaurants);
 	}
 
 	public function getTotalAmount(): int
@@ -41,7 +41,7 @@ class Result
 
 	public function getNumberOfSuccessful(): int
 	{
-		return count($this->menu);
+		return count($this->restaurants);
 	}
 
 	public function hasErrors(): bool

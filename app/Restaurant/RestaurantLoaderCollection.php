@@ -2,13 +2,13 @@
 
 namespace LunchCrawler\Restaurant;
 
-class RestaurantCollection
+class RestaurantLoaderCollection
 {
 
-	/** @var \LunchCrawler\Restaurant\Restaurant[] */
+	/** @var \LunchCrawler\Restaurant\RestaurantLoader[] */
 	private $restaurants;
 
-	public function addRestaurant(Restaurant $restaurant): void
+	public function addRestaurant(RestaurantLoader $restaurant): void
 	{
 		$this->restaurants[] = $restaurant;
 	}
@@ -19,7 +19,7 @@ class RestaurantCollection
 	}
 
 	/**
-	 * @return \LunchCrawler\Restaurant\Restaurant[]
+	 * @return \LunchCrawler\Restaurant\RestaurantLoader[]
 	 */
 	public function getRestaurants(): array
 	{
@@ -27,7 +27,7 @@ class RestaurantCollection
 	}
 
 	/**
-	 * @param \LunchCrawler\Restaurant\Restaurant[] $restaurants
+	 * @param \LunchCrawler\Restaurant\RestaurantLoader[] $restaurants
 	 */
 	public function setRestaurants(array $restaurants): void
 	{

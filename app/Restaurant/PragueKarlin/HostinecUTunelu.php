@@ -4,16 +4,18 @@ namespace LunchCrawler\Restaurant\PragueKarlin;
 
 use LunchCrawler\Restaurant\Menu\Menu;
 use LunchCrawler\Restaurant\Restaurant;
+use LunchCrawler\Restaurant\RestaurantLoader;
 
-final class HostinecUTunelu implements Restaurant
+final class HostinecUTunelu implements RestaurantLoader
 {
 
 	private const MENU_URL = 'http://www.utunelu.cz/denni_menu.pdf';
 	private const NAME = 'Hostinec U Tunelu';
 
-	public function loadMenu(): Menu
+	public function loadRestaurant(): Restaurant
 	{
-		return Menu::createFromUrl(self::NAME, self::MENU_URL);
+		$menu = Menu::createFromUrl(self::MENU_URL);
+		return new Restaurant(self::NAME, $menu);
 	}
 
 }

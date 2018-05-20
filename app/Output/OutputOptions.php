@@ -7,8 +7,7 @@ class OutputOptions
 
 	public const CONSOLE = 'console';
 	public const SLACK = 'slack';
-	public const DUMP = 'dump';
-	public const OUTPUTS = [self::CONSOLE, self::DUMP, self::SLACK];
+	public const OUTPUTS = [self::CONSOLE, self::SLACK];
 
 	public static function isValid(string $option): bool
 	{

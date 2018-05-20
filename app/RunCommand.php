@@ -4,7 +4,7 @@ namespace LunchCrawler;
 
 use LunchCrawler\Output\OutputHandlerFactory;
 use LunchCrawler\Output\OutputOptions;
-use LunchCrawler\Restaurant\RestaurantCollection;
+use LunchCrawler\Restaurant\RestaurantLoaderCollection;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;
@@ -20,21 +20,21 @@ class RunCommand extends Command
 	/** @var \LunchCrawler\Crawler */
 	private $crawler;
 
-	/** @var \LunchCrawler\Restaurant\RestaurantCollection */
-	private $restaurantCollection;
+	/** @var \LunchCrawler\Restaurant\RestaurantLoaderCollection */
+	private $restaurantLoaderCollection;
 
 	/** @var \LunchCrawler\Output\OutputHandlerFactory */
 	private $outputHandlerFactory;
 
 	public function __construct(
 		Crawler $crawler,
-		RestaurantCollection $restaurantCollection,
+		RestaurantLoaderCollection $restaurantLoaderCollection,
 		OutputHandlerFactory $outputHandlerFactory
 	)
 	{
 		parent::__construct();
 		$this->crawler = $crawler;
-		$this->restaurantCollection = $restaurantCollection;
+		$this->restaurantLoaderCollection = $restaurantLoaderCollection;
 		$this->outputHandlerFactory = $outputHandlerFactory;
 	}
 
@@ -62,10 +62,10 @@ class RunCommand extends Command
 			return 2;
 		}
 
-		$progressBar = new ProgressBar($output, $this->restaurantCollection->getCount());
+		$progressBar = new ProgressBar($output, $this->restaurantLoaderCollection->getCount());
 
 		$this->crawler->setProgressBar($progressBar);
-		$result = $this->crawler->crawl($this->restaurantCollection->getRestaurants());
+		$result = $this->crawler->crawl($this->restaurantLoaderCollection->getRestaurants());
 
 		if (!$result->isEmpty()) {
 			$outputHandler = $this->outputHandlerFactory->create($outputOption, $io);

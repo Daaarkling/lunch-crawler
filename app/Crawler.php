@@ -2,8 +2,8 @@
 
 namespace LunchCrawler;
 
-use LunchCrawler\Restaurant\EmptyRestaurantException;
-use LunchCrawler\Restaurant\RestaurantParseException;
+use LunchCrawler\Restaurant\RestaurantEmptyMenuException;
+use LunchCrawler\Restaurant\RestaurantLoadException;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Tracy\Debugger;
 
@@ -20,26 +20,22 @@ class Crawler
 	}
 
 	/**
-	 * @param \LunchCrawler\Restaurant\Restaurant[] $restaurants
+	 * @param \LunchCrawler\Restaurant\RestaurantLoader[] $restaurantsLoaders
 	 * @return \LunchCrawler\Result
 	 */
-	public function crawl(array $restaurants): Result
+	public function crawl(array $restaurantsLoaders): Result
 	{
 		if ($this->progressBar !== null) {
 			$this->progressBar->start();
 		}
 
-		$menu = [];
-		foreach ($restaurants as $restaurant) {
+		$restaurants = [];
+		foreach ($restaurantsLoaders as $restaurantLoader) {
 			try {
-				$loadedMenu = $restaurant->loadMenu();
-				if (!$loadedMenu->isEmpty()) {
-					$menu[] = $loadedMenu;
-				}
-
-				Debugger::log(new EmptyRestaurantException($loadedMenu->getName()));
-
-			} catch (RestaurantParseException $e) {
+				$restaurants[] = $restaurantLoader->loadRestaurant();
+			} catch (RestaurantEmptyMenuException $e) {
+				Debugger::log($e);
+			} catch (RestaurantLoadException $e) {
 				Debugger::log($e);
 			}
 
@@ -52,7 +48,7 @@ class Crawler
 			$this->progressBar->finish();
 		}
 
-		return new Result($menu, count($restaurants));
+		return new Result($restaurants, count($restaurantsLoaders));
 	}
 
 }

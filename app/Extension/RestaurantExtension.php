@@ -2,7 +2,7 @@
 
 namespace LunchCrawler\Extension;
 
-use LunchCrawler\Restaurant\RestaurantCollection;
+use LunchCrawler\Restaurant\RestaurantLoaderCollection;
 use Nette\DI\CompilerExtension;
 
 class RestaurantExtension extends CompilerExtension
@@ -14,7 +14,7 @@ class RestaurantExtension extends CompilerExtension
 		$config = $this->getConfig();
 
 		$restaurantCollection = $builder->addDefinition($this->prefix('crawler'))
-			->setFactory(RestaurantCollection::class);
+			->setFactory(RestaurantLoaderCollection::class);
 
 		foreach ($config as $key => $restaurants) {
 			$serviceName = $this->prefix((string) $key);

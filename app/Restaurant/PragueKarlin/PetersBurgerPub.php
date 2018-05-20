@@ -2,9 +2,9 @@
 
 namespace LunchCrawler\Restaurant\PragueKarlin;
 
-use LunchCrawler\Restaurant\ZomatoRestaurant;
+use LunchCrawler\Restaurant\ZomatoRestaurantLoader;
 
-final class PetersBurgerPub extends ZomatoRestaurant
+final class PetersBurgerPub extends ZomatoRestaurantLoader
 {
 
 	private const ID = 16506740;

@@ -18,14 +18,15 @@ class OutputHandlerFactory
 
 	public function create(string $option, SymfonyStyle $io): OutputHandler
 	{
+		if (!OutputOptions::isValid($option)) {
+			throw new InvalidOutputOptionException($option);
+		}
+
 		if ($option === OutputOptions::SLACK) {
 			$outputHandler = new SlackOutputHandler($this->slackClient);
 
-		} elseif ($option === OutputOptions::CONSOLE) {
-			$outputHandler = new ConsoleOutputHandler($io);
-
 		} else {
-			$outputHandler = new DumpOutputHandler();
+			$outputHandler = new ConsoleOutputHandler($io);
 		}
 
 		return $outputHandler;

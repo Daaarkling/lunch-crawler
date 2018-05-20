@@ -5,9 +5,6 @@ namespace LunchCrawler\Restaurant\Menu;
 class Menu
 {
 
-	/** @var string */
-	private $name;
-
 	/** @var \LunchCrawler\Restaurant\Menu\Dish[] */
 	private $soups;
 
@@ -21,21 +18,18 @@ class Menu
 	private $url;
 
 	/**
-	 * @param string $name
 	 * @param \LunchCrawler\Restaurant\Menu\Dish[] $soups
 	 * @param \LunchCrawler\Restaurant\Menu\Dish[] $meals
 	 * @param string|null $imageUrl
 	 * @param string|null $url
 	 */
 	private function __construct(
-		string $name,
 		array $soups = [],
 		array $meals = [],
 		?string $imageUrl = null,
 		?string $url = null
 	)
 	{
-		$this->name = $name;
 		$this->soups = $soups;
 		$this->meals = $meals;
 		$this->imageUrl = $imageUrl;
@@ -43,24 +37,23 @@ class Menu
 	}
 
 	/**
-	 * @param string $name
 	 * @param \LunchCrawler\Restaurant\Menu\Dish[] $soups
 	 * @param \LunchCrawler\Restaurant\Menu\Dish[] $meals
 	 * @return \LunchCrawler\Restaurant\Menu\Menu
 	 */
-	public static function createFromDishes(string $name, array $soups = [], array $meals = []): Menu
+	public static function createFromDishes(array $soups = [], array $meals = []): Menu
 	{
-		return new self($name, $soups, $meals);
+		return new self($soups, $meals);
 	}
 
-	public static function createFromImageUrl(string $name, string $imageUrl): Menu
+	public static function createFromImageUrl(string $imageUrl): Menu
 	{
-		return new self($name, [], [], $imageUrl);
+		return new self([], [], $imageUrl);
 	}
 
-	public static function createFromUrl(string $name, string $url): Menu
+	public static function createFromUrl(string $url): Menu
 	{
-		return new self($name, [], [], null, $url);
+		return new self([], [], null, $url);
 	}
 
 	public function hasDishes(): bool
@@ -81,11 +74,6 @@ class Menu
 	public function isEmpty(): bool
 	{
 		return !$this->hasDishes() && !$this->hasImageUrl() && !$this->hasUrl();
-	}
-
-	public function getName(): string
-	{
-		return $this->name;
 	}
 
 	/**

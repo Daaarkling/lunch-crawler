@@ -3,19 +3,21 @@
 namespace LunchCrawler\Restaurant\PragueKarlin;
 
 use Atrox\Matcher;
-use LunchCrawler\Restaurant\HtmlParseRestaurant;
+use LunchCrawler\Restaurant\HtmlParseRestaurantLoader;
 use LunchCrawler\Restaurant\Menu\Dish;
 use LunchCrawler\Restaurant\Menu\Menu;
-use LunchCrawler\Restaurant\RestaurantParseException;
+use LunchCrawler\Restaurant\Restaurant;
+use LunchCrawler\Restaurant\RestaurantEmptyMenuException;
+use LunchCrawler\Restaurant\RestaurantLoadException;
 use Throwable;
 
-final class Globus extends HtmlParseRestaurant
+final class Globus extends HtmlParseRestaurantLoader
 {
 
 	private const MENU_URL = 'http://restauraceglobus.cz/poledni-menu/';
 	private const NAME = 'Restaurace Globus';
 
-	public function loadMenu(): Menu
+	public function loadRestaurant(): Restaurant
 	{
 		try {
 			$response = $this->httpClient->request('GET', self::MENU_URL);
@@ -48,10 +50,18 @@ final class Globus extends HtmlParseRestaurant
 			// last one is dessert
 			array_pop($meals);
 
-			return Menu::createFromDishes(self::NAME, [$soap], $meals);
+			$menu = Menu::createFromDishes([$soap], $meals);
 
+			if ($menu->isEmpty()) {
+				throw new RestaurantEmptyMenuException(self::NAME);
+			}
+
+			return new Restaurant(self::NAME, $menu);
+
+		} catch (RestaurantEmptyMenuException $e) {
+			throw $e;
 		} catch (Throwable $e) {
-			throw new RestaurantParseException(self::NAME, $e);
+			throw new RestaurantLoadException(self::NAME, $e);
 		}
 	}
 

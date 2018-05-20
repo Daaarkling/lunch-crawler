@@ -15,6 +15,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 class RunCommand extends Command
 {
 
+	private const NAME = 'run';
 	private const OPTION_OUTPUT = 'output';
 
 	/** @var \LunchCrawler\Crawler */
@@ -41,7 +42,7 @@ class RunCommand extends Command
 
 	protected function configure(): void
 	{
-		$this->setName('run')
+		$this->setName(self::NAME)
 			->setDescription('Crawl through restaurants.')
 			->addOption(
 				self::OPTION_OUTPUT,

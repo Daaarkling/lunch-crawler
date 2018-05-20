@@ -7,11 +7,13 @@ services:
 	- LunchCrawler\Crawler
 	- LunchCrawler\Output\OutputHandlerFactory
 
-	runCommand: LunchCrawler\RunCommand
+	runCommand: LunchCrawler\Command\RunCommand
+	zomatoRestaurantIdCommand: LunchCrawler\Command\ZomatoRestaurantIdCommand
 	application:
 		factory: Symfony\Component\Console\Application
 		setup:
 			- add(@runCommand)
+			- add(@zomatoRestaurantIdCommand)
 
 
 extensions:

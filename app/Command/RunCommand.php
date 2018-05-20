@@ -1,7 +1,8 @@
 <?php declare(strict_types = 1);
 
-namespace LunchCrawler;
+namespace LunchCrawler\Command;
 
+use LunchCrawler\Crawler;
 use LunchCrawler\Output\OutputHandlerFactory;
 use LunchCrawler\Output\OutputOptions;
 use LunchCrawler\Restaurant\RestaurantLoaderCollection;

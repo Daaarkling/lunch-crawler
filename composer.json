@@ -24,7 +24,8 @@
 		"tracy/tracy": "^2.4",
 		"alek13/slack": "^2.0",
 		"nette/di": "^3.0",
-		"nette/bootstrap": "^3.0"
+		"nette/bootstrap": "^3.0",
+		"nette/http": "^3.0"
 	},
 	"require-dev": {
 		"consistence/coding-standard": "^3.0",

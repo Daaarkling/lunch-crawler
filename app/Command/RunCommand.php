@@ -1,7 +1,8 @@
 <?php declare(strict_types = 1);
 
-namespace LunchCrawler;
+namespace LunchCrawler\Command;
 
+use LunchCrawler\Crawler;
 use LunchCrawler\Output\OutputHandlerFactory;
 use LunchCrawler\Output\OutputOptions;
 use LunchCrawler\Restaurant\RestaurantLoaderCollection;
@@ -15,6 +16,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 class RunCommand extends Command
 {
 
+	private const NAME = 'run';
 	private const OPTION_OUTPUT = 'output';
 
 	/** @var \LunchCrawler\Crawler */
@@ -41,7 +43,7 @@ class RunCommand extends Command
 
 	protected function configure(): void
 	{
-		$this->setName('run')
+		$this->setName(self::NAME)
 			->setDescription('Crawl through restaurants.')
 			->addOption(
 				self::OPTION_OUTPUT,

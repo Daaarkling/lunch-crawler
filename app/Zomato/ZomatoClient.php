@@ -3,6 +3,7 @@
 namespace LunchCrawler\Zomato;
 
 use GuzzleHttp\Client;
+use Nette\Http\Url;
 use Nette\Utils\Json;
 use stdClass;
 
@@ -11,8 +12,9 @@ class ZomatoClient
 
 	public const PRAGUE_CITY_ID = 84;
 
-	private const API_URL = 'https://developers.zomato.com/api/v2.1/';
-	private const API_URL_DAILY_MENU = '/dailymenu?res_id=';
+	private const URL_BASE = 'https://developers.zomato.com/api/v2.1/';
+	private const URL_DAILY_MENU = '/dailymenu';
+	private const URL_SEARCH = '/search';
 
 	/** @var \GuzzleHttp\Client */
 	private $httpClient;
@@ -24,21 +26,53 @@ class ZomatoClient
 
 	public function getDailyMenu(int $restaurantId): stdClass
 	{
-		$request = $this->httpClient->request(
-			'GET',
-			sprintf('%s%s%s', self::API_URL, self::API_URL_DAILY_MENU, $restaurantId)
-		);
+		$url = new Url(self::URL_BASE . self::URL_DAILY_MENU);
+		$url->appendQuery([
+			'res_id' => $restaurantId,
+		]);
 
-		if ($request->getStatusCode() !== 200) {
+		$response = $this->httpClient->request('GET', $url->getAbsoluteUrl());
+
+		if ($response->getStatusCode() !== 200) {
 			throw new DailyMenuNotFoundException($restaurantId);
 		}
 
-		return Json::decode($request->getBody()->getContents());
+		return Json::decode($response->getBody()->getContents());
 	}
 
-	public function getRestaurantId(string $name, int $cityId = self::PRAGUE_CITY_ID): int
+	/**
+	 * @param string $name
+	 * @param int $cityId
+	 * @return string[]
+	 */
+	public function getRestaurantId(string $name, int $cityId = self::PRAGUE_CITY_ID): array
 	{
-		return -1;
+		$url = new Url(self::URL_BASE . self::URL_SEARCH);
+		$url->appendQuery([
+			'entity_type' => 'city',
+			'entity_id' => $cityId,
+			'count' => 5,
+			'q' => $name,
+		]);
+
+		$response = $this->httpClient->request('GET', $url->getAbsoluteUrl());
+
+		if ($response->getStatusCode() !== 200) {
+			return [];
+		}
+
+		$data = Json::decode($response->getBody()->getContents());
+
+		$possibilities = [];
+		foreach ($data->restaurants as $restaurant) {
+			$possibilities[] = [
+				'id' => $restaurant->restaurant->id,
+				'name' => $restaurant->restaurant->name,
+				'url' => $restaurant->restaurant->url,
+			];
+		}
+
+		return $possibilities;
 	}
 
 }

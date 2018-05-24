@@ -1,25 +1,11 @@
 #!/usr/bin/env php
-<?php declare(strict_types=1);
+<?php declare(strict_types = 1);
 
-use Nette\Configurator;
 use Symfony\Component\Console\Application;
 
-require __DIR__ . '/../vendor/autoload.php';
+/** @var \Nette\DI\Container $container */
+$container = require __DIR__ . '/../app/bootstrap.php';
 
-$configurator = new Configurator();
-$configurator->setDebugMode(true);
-$configurator->enableTracy(__DIR__ . '/../log');
-$configurator->setTimeZone('Europe/Prague');
-$configurator->setTempDirectory(__DIR__ . '/../temp');
-$configurator->createRobotLoader()
-	->addDirectory(__DIR__ . '/../app')
-	->register();
-$configurator->addConfig(__DIR__ . '/../app/config/config.neon');
-$configurator->addConfig(__DIR__ . '/../app/config/config.local.neon');
-
-
-$container = $configurator->createContainer();
-
-/** @var \Symfony\Component\Console\Application $application */
-$application = $container->getByType(Application::class);
-$application->run();
+/** @var \Symfony\Component\Console\Application $app */
+$app = $container->getByType(Application::class);
+$app->run();

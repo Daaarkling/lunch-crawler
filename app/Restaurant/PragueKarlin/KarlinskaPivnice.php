@@ -35,7 +35,7 @@ final class KarlinskaPivnice extends HtmlParseRestaurantLoader
 			$soaps = [];
 			$meals = [];
 			foreach ($rawDishes as $rawDish) {
-				$name = $rawDish['name'];
+				$name = utf8_decode($rawDish['name']);
 				$price = (int) $rawDish['price'];
 				if ($name === '' || $price === 0) {
 					continue;

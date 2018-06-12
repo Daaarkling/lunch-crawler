@@ -6,52 +6,60 @@ class Result
 {
 
 	/** @var \LunchCrawler\Restaurant\Restaurant[] */
-	private $restaurants;
+	private $successful;
 
-	/** @var int */
-	private $totalAmount;
+	/** @var string[] */
+	private $failed;
 
 	/**
-	 * @param \LunchCrawler\Restaurant\Restaurant[] $restaurants
-	 * @param int $totalAmount
+	 * @param \LunchCrawler\Restaurant\Restaurant[] $successful
+	 * @param string[] $failed
 	 */
-	public function __construct(array $restaurants, int $totalAmount)
+	public function __construct(array $successful, array $failed)
 	{
-		$this->restaurants = $restaurants;
-		$this->totalAmount = $totalAmount;
+		$this->successful = $successful;
+		$this->failed = $failed;
+	}
+
+	public function getTotalCount(): int
+	{
+		return count($this->failed) + count($this->successful);
 	}
 
 	/**
 	 * @return \LunchCrawler\Restaurant\Restaurant[]
 	 */
-	public function getRestaurants(): array
+	public function getSuccessful(): array
 	{
-		return $this->restaurants;
+		return $this->successful;
 	}
 
-	public function getNumberOfFailed(): int
+	public function hasSuccessful(): bool
 	{
-		return $this->totalAmount - count($this->restaurants);
-	}
-
-	public function getTotalAmount(): int
-	{
-		return $this->totalAmount;
+		return $this->getNumberOfSuccessful() > 0;
 	}
 
 	public function getNumberOfSuccessful(): int
 	{
-		return count($this->restaurants);
+		return count($this->successful);
 	}
 
-	public function hasErrors(): bool
+	/**
+	 * @return string[]
+	 */
+	public function getFailed(): array
+	{
+		return $this->failed;
+	}
+
+	public function hasFailed(): bool
 	{
 		return $this->getNumberOfFailed() > 0;
 	}
 
-	public function isEmpty(): bool
+	public function getNumberOfFailed(): int
 	{
-		return $this->getNumberOfSuccessful() === 0;
+		return count($this->failed);
 	}
 
 }

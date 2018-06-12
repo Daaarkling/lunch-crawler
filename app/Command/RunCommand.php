@@ -69,20 +69,22 @@ class RunCommand extends Command
 		$this->crawler->setProgressBar($progressBar);
 		$result = $this->crawler->crawl($this->restaurantLoaderCollection->getRestaurants());
 
-		if (!$result->isEmpty()) {
+		if ($result->hasSuccessful()) {
 			$outputHandler = $this->outputHandlerFactory->create($outputOption, $io);
 			$outputHandler->handle($result);
 		}
 
 		$message = sprintf(
-			'Total: %d, Success: %d, Error: %d',
-			$result->getTotalAmount(),
+			'Total: %d, Successful: %d, Failed: %d',
+			$result->getTotalCount(),
 			$result->getNumberOfSuccessful(),
 			$result->getNumberOfFailed()
 		);
 
-		if ($result->hasErrors()) {
+		if ($result->hasFailed()) {
 			$io->error($message);
+			$io->writeln('Failed:');
+			$io->listing($result->getFailed());
 			return 1;
 		} else {
 			$io->success($message);

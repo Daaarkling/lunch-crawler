@@ -29,7 +29,7 @@ class SlackOutputHandler implements OutputHandler
 
 	public function handle(Result $result): void
 	{
-		foreach ($result->getRestaurants() as $restaurant) {
+		foreach ($result->getSuccessful() as $restaurant) {
 			$this->io->title(sprintf('*%s*', $restaurant->getName()));
 			$menu = $restaurant->getMenu();
 

@@ -29,14 +29,20 @@ class Crawler
 			$this->progressBar->start();
 		}
 
-		$restaurants = [];
+		$successful = [];
+		$failed = [];
 		foreach ($restaurantsLoaders as $restaurantLoader) {
 			try {
-				$restaurants[] = $restaurantLoader->loadRestaurant();
+				$successful[] = $restaurantLoader->loadRestaurant();
+
 			} catch (RestaurantEmptyMenuException $e) {
 				Debugger::log($e);
+				$failed[] = get_class($restaurantLoader);
+
 			} catch (RestaurantLoadException $e) {
 				Debugger::log($e);
+				$failed[] = get_class($restaurantLoader);
+
 			}
 
 			if ($this->progressBar !== null) {
@@ -48,7 +54,7 @@ class Crawler
 			$this->progressBar->finish();
 		}
 
-		return new Result($restaurants, count($restaurantsLoaders));
+		return new Result($successful, $failed);
 	}
 
 }

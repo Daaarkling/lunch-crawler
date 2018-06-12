@@ -18,7 +18,7 @@ class ConsoleOutputHandler implements OutputHandler
 
 	public function handle(Result $result): void
 	{
-		foreach ($result->getRestaurants() as $restaurant) {
+		foreach ($result->getSuccessful() as $restaurant) {
 			$this->io->title($restaurant->getName());
 			$menu = $restaurant->getMenu();
 

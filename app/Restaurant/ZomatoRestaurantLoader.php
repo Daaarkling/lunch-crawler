@@ -44,7 +44,10 @@ abstract class ZomatoRestaurantLoader implements RestaurantLoader
 
 			$menu = Menu::createFromDishes($soaps, $meals);
 
-			if ($menu->isEmpty()) {
+			if ($menu->isEmpty() && $this->getUrlMenu() !== '') {
+				$menu = Menu::createFromUrl($this->getUrlMenu());
+
+			} elseif ($menu->isEmpty()) {
 				throw new RestaurantEmptyMenuException($this->getName());
 			}
 
@@ -52,6 +55,7 @@ abstract class ZomatoRestaurantLoader implements RestaurantLoader
 
 		} catch (RestaurantEmptyMenuException $e) {
 			throw $e;
+
 		} catch (Throwable $e) {
 			throw new RestaurantLoadException($this->getName(), $e);
 		}
@@ -60,5 +64,10 @@ abstract class ZomatoRestaurantLoader implements RestaurantLoader
 	abstract public function getRestaurantId(): int;
 
 	abstract public function getName(): string;
+
+	public function getUrlMenu(): string
+	{
+		return '';
+	}
 
 }

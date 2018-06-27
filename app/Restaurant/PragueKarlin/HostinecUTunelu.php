@@ -17,4 +17,9 @@ final class HostinecUTunelu extends ZomatoRestaurantLoader
 		return 'Hostinec U Tunelu';
 	}
 
+	public function getUrlMenu(): string
+	{
+		return 'http://www.utunelu.cz/denni_menu.pdf';
+	}
+
 }

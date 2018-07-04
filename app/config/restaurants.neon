@@ -1,7 +1,8 @@
 restaurants:
-	- LunchCrawler\Restaurant\PragueKarlin\PetersBurgerPub
+	- LunchCrawler\Restaurant\PragueKarlin\CihelnaLaFamiliaHtml
 	- LunchCrawler\Restaurant\PragueKarlin\HamburkLokal
 	- LunchCrawler\Restaurant\PragueKarlin\HostinecUTunelu
 	#- LunchCrawler\Restaurant\PragueKarlin\Globus
 	- LunchCrawler\Restaurant\PragueKarlin\GlobusHtml
 	- LunchCrawler\Restaurant\PragueKarlin\KarlinskaPivnice
+	- LunchCrawler\Restaurant\PragueKarlin\PetersBurgerPub

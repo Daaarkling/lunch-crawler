@@ -6,6 +6,8 @@ services:
 	- GuzzleHttp\Client
 	- LunchCrawler\Crawler
 	- LunchCrawler\Output\OutputHandlerFactory
+	- Smalot\PdfParser\Parser
+
 
 	runCommand: LunchCrawler\Command\RunCommand
 	zomatoRestaurantIdCommand: LunchCrawler\Command\ZomatoRestaurantIdCommand

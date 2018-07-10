@@ -4,7 +4,7 @@ namespace LunchCrawler\Restaurant\PragueKarlin;
 
 use LunchCrawler\Restaurant\ZomatoRestaurantLoader;
 
-final class HostinecUTunelu extends ZomatoRestaurantLoader
+final class HostinecUTuneluZomato extends ZomatoRestaurantLoader
 {
 
 	public function getRestaurantId(): int

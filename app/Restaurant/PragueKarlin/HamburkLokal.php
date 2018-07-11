@@ -25,7 +25,7 @@ final class HamburkLokal extends HtmlParseRestaurantLoader
 			$response = $this->httpClient->request('GET', self::MENU_URL);
 			$html = $response->getBody()->getContents();
 
-			$matcher = Matcher::multi('//div[@id="lunch-menu-container"]//div[contains(@class, "boxx")][3]//tr[not(@class)]', [
+			$matcher = Matcher::multi('//div[@id="lunch-menu"]/div[@class="header-part"]/span[contains(text(), "dnes")]/parent::div/parent::div//img[contains(@alt, "Hamburk")]/ancestor::div[contains(@class, "boxx")]//tr[not(@class)]', [
 				'name' => './td[1]',
 				'price' => './td[2]',
 			])->fromHtml();

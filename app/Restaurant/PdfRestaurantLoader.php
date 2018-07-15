@@ -5,6 +5,7 @@ namespace LunchCrawler\Restaurant;
 use LunchCrawler\Restaurant\Menu\Menu;
 use Smalot\PdfParser\Parser;
 use Throwable;
+use Tracy\Debugger;
 
 abstract class PdfRestaurantLoader implements RestaurantLoader
 {
@@ -31,7 +32,10 @@ abstract class PdfRestaurantLoader implements RestaurantLoader
 			return new Restaurant($this->getName(), $menu);
 
 		} catch (Throwable $e) {
-			throw new RestaurantLoadException($this->getName(), $e);
+			Debugger::log(new RestaurantLoadException($this->getName(), $e));
+
+			$menu = Menu::createFromUrl($this->getUrlMenu());
+			return new Restaurant($this->getName(), $menu);
 		}
 	}
 

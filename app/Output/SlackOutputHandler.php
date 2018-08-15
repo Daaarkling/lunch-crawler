@@ -43,8 +43,10 @@ class SlackOutputHandler implements OutputHandler
 				foreach ($menu->getMeals() as $meal) {
 					$this->io->text(sprintf('- %s - %d Kč', $meal->getName(), $meal->getPrice()));
 				}
+
 			} elseif ($menu->hasImageUrl()) {
-				$this->io->text(sprintf('![menu](%s)', $menu->getImageUrl()));
+				$this->io->text($menu->getImageUrl());
+
 			} else {
 				$this->io->text($menu->getUrl());
 			}

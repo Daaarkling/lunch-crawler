@@ -11,7 +11,7 @@ class ZomatoExtension extends CompilerExtension
 
 	/** @var mixed[] */
 	private $defaultConfig = [
-		'user_key' => null,
+		'userKey' => null,
 	];
 
 	public function loadConfiguration(): void
@@ -25,7 +25,7 @@ class ZomatoExtension extends CompilerExtension
 			->setArguments([
 				'config' => [
 					'headers' => [
-						'user_key' => $config['user_key'],
+						'user_key' => $config['userKey'],
 					],
 				],
 			]);

@@ -15,11 +15,7 @@ final class HostinecUTuneluPdf extends PdfRestaurantLoader
 	{
 		$startDay = mb_strtoupper(WeekDay::getCurrentCzechName());
 
-		if (WeekDay::isFriday()) {
-			$endDay = 'NABÍDKA';
-		} else {
-			$endDay = mb_strtoupper(WeekDay::getTomorrowCzechName());
-		}
+		$endDay = WeekDay::isFriday() ? 'NABÍDKA' : mb_strtoupper(WeekDay::getTomorrowCzechName());
 
 		$pattern = sprintf('~(?<=%s)(.*)(?=%s)~isU', $startDay, $endDay);
 		$textDay = Strings::match($text, $pattern)[0];

@@ -86,10 +86,10 @@ class RunCommand extends Command
 			$io->writeln('Failed:');
 			$io->listing($result->getFailed());
 			return 1;
-		} else {
-			$io->success($message);
-			return 0;
 		}
+
+		$io->success($message);
+		return 0;
 	}
 
 }

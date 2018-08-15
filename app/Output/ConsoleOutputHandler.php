@@ -32,8 +32,10 @@ class ConsoleOutputHandler implements OutputHandler
 				foreach ($menu->getMeals() as $meal) {
 					$this->io->text(sprintf('- %s - %d Kč', $meal->getName(), $meal->getPrice()));
 				}
+
 			} elseif ($menu->hasImageUrl()) {
 				$this->io->text($menu->getImageUrl());
+
 			} else {
 				$this->io->text($menu->getUrl());
 			}

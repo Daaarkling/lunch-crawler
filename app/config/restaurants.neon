@@ -7,3 +7,4 @@ restaurants:
 	- LunchCrawler\Restaurant\PragueKarlin\GlobusHtml
 	- LunchCrawler\Restaurant\PragueKarlin\KarlinskaPivnice
 	- LunchCrawler\Restaurant\PragueKarlin\PetersBurgerPub
+	- LunchCrawler\Restaurant\PragueKarlin\Podolka

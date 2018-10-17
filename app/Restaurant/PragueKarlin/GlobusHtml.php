@@ -9,7 +9,11 @@ use LunchCrawler\Restaurant\Menu\Menu;
 use LunchCrawler\Restaurant\Restaurant;
 use LunchCrawler\Restaurant\RestaurantEmptyMenuException;
 use LunchCrawler\Restaurant\RestaurantLoadException;
+use Nette\Utils\Strings;
 use Throwable;
+use const FILTER_SANITIZE_NUMBER_INT;
+use function filter_var;
+use function str_replace;
 
 final class GlobusHtml extends HtmlParseRestaurantLoader
 {
@@ -31,7 +35,9 @@ final class GlobusHtml extends HtmlParseRestaurantLoader
 					$day <= 3 ? $day : $day - 3
 				),
 				[
-					'soap' => './/p',
+					'soap' => './/p[2]',
+					'special1' => './/p[3]',
+					'special2' => './/p[4]',
 					'dish' => Matcher::multi('.//ol/li'),
 				]
 			)->fromHtml();
@@ -39,10 +45,23 @@ final class GlobusHtml extends HtmlParseRestaurantLoader
 			/** @var string[]&string[][] $rawDishes */
 			$rawDishes = $matcher($html);
 
-			$soaps[] = new Dish(utf8_decode($rawDishes['soap']), 0);
+			[$name, $price] = $this->extractNameAndPrice($rawDishes['soap']);
+			$soaps[] = new Dish($name, $price);
+
 			$meals = [];
 			foreach ($rawDishes['dish'] as $rawDish) {
-				$meals[] = new Dish(utf8_decode($rawDish), 0);
+				[$name, $price] = $this->extractNameAndPrice($rawDish);
+				$meals[] = new Dish($name, $price);
+			}
+
+			if ($rawDishes['special1'] !== null && $rawDishes['special1'] !== '') {
+				[$name, $price] = $this->extractNameAndPrice($rawDishes['special1']);
+				$meals[] = new Dish($name, $price);
+			}
+
+			if ($rawDishes['special2'] !== null && $rawDishes['special2'] !== '') {
+				[$name, $price] = $this->extractNameAndPrice($rawDishes['special2']);
+				$meals[] = new Dish($name, $price);
 			}
 
 			$menu = Menu::createFromDishes($soaps, $meals);
@@ -58,6 +77,18 @@ final class GlobusHtml extends HtmlParseRestaurantLoader
 		} catch (Throwable $e) {
 			throw new RestaurantLoadException(self::NAME, $e);
 		}
+	}
+
+	/**
+	 * @param string $value
+	 * @return mixed[]
+	 */
+	private function extractNameAndPrice(string $value): array
+	{
+		$price = (int) filter_var(substr($value, -5), FILTER_SANITIZE_NUMBER_INT);
+		$name = Strings::trim(utf8_decode(str_replace($price . ',-', '', $value)));
+
+		return [$name, $price];
 	}
 
 }

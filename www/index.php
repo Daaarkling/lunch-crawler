@@ -3,6 +3,7 @@
 use LunchCrawler\Command\RunCommand;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\NullOutput;
+use Tracy\Debugger;
 
 /** @var \Nette\DI\Container $container */
 $container = require __DIR__ . '/../app/bootstrap.php';
@@ -10,7 +11,7 @@ $container = require __DIR__ . '/../app/bootstrap.php';
 $params = $container->getParameters();
 
 if (!array_key_exists('wwwSecret', $params)) {
-	echo 'Define `wwwSecret` in neon parameters section.';
+	Debugger::log('Define `wwwSecret` in neon parameters section.');
 	exit(1);
 }
 
@@ -27,7 +28,8 @@ $runCommand = $container->getByType(RunCommand::class);
 
 $output = new NullOutput();
 $input = new ArrayInput([
-	'--output' => 'slack'
+	'--output' => 'slack',
+	'--calendar' => true,
 ]);
 
 $statusCode = $runCommand->run($input, $output);

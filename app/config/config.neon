@@ -5,6 +5,7 @@ includes:
 services:
 	- GuzzleHttp\Client
 	- LunchCrawler\Crawler
+	- LunchCrawler\Date\Calendar
 	- LunchCrawler\Output\OutputHandlerFactory
 	- Smalot\PdfParser\Parser
 

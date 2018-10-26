@@ -2,7 +2,9 @@
 
 namespace LunchCrawler\Command;
 
+use DateTimeImmutable;
 use LunchCrawler\Crawler;
+use LunchCrawler\Date\Calendar;
 use LunchCrawler\Output\OutputHandlerFactory;
 use LunchCrawler\Output\OutputOptions;
 use LunchCrawler\Restaurant\RestaurantLoaderCollection;
@@ -18,6 +20,7 @@ class RunCommand extends Command
 
 	private const NAME = 'run';
 	private const OPTION_OUTPUT = 'output';
+	private const OPTION_CALENDAR = 'calendar';
 
 	/** @var \LunchCrawler\Crawler */
 	private $crawler;
@@ -28,16 +31,21 @@ class RunCommand extends Command
 	/** @var \LunchCrawler\Output\OutputHandlerFactory */
 	private $outputHandlerFactory;
 
+	/** @var \LunchCrawler\Date\Calendar */
+	private $calendar;
+
 	public function __construct(
 		Crawler $crawler,
 		RestaurantLoaderCollection $restaurantLoaderCollection,
-		OutputHandlerFactory $outputHandlerFactory
+		OutputHandlerFactory $outputHandlerFactory,
+		Calendar $calendar
 	)
 	{
 		parent::__construct();
 		$this->crawler = $crawler;
 		$this->restaurantLoaderCollection = $restaurantLoaderCollection;
 		$this->outputHandlerFactory = $outputHandlerFactory;
+		$this->calendar = $calendar;
 	}
 
 
@@ -51,11 +59,23 @@ class RunCommand extends Command
 				InputOption::VALUE_REQUIRED,
 				'Set output. You can choose from several choices: ' . implode(', ', OutputOptions::OUTPUTS) . '.',
 				OutputOptions::CONSOLE
+			)->addOption(
+				self::OPTION_CALENDAR,
+				'c',
+				InputOption::VALUE_NONE,
+				'Crawl only during work days and also skip czech holidays.'
 			);
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output): int
 	{
+		/** @var bool $isCalendar */
+		$isCalendar = $input->getOption(self::OPTION_CALENDAR);
+
+		if ($isCalendar && !$this->calendar->isWorkDay(new DateTimeImmutable())) {
+			return 3;
+		}
+
 		$io = new SymfonyStyle($input, $output);
 
 		/** @var string $outputOption */

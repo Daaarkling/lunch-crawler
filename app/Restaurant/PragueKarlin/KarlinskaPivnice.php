@@ -8,6 +8,7 @@ use LunchCrawler\Restaurant\Menu\Dish;
 use LunchCrawler\Restaurant\Menu\Menu;
 use LunchCrawler\Restaurant\Restaurant;
 use LunchCrawler\Restaurant\RestaurantEmptyMenuException;
+use LunchCrawler\Restaurant\RestaurantFormatter;
 use LunchCrawler\Restaurant\RestaurantLoadException;
 use Throwable;
 
@@ -35,7 +36,7 @@ final class KarlinskaPivnice extends HtmlParseRestaurantLoader
 			$soaps = [];
 			$meals = [];
 			foreach ($rawDishes as $rawDish) {
-				$name = utf8_decode($rawDish['name']);
+				$name = RestaurantFormatter::format($rawDish['name']);
 				$price = (int) $rawDish['price'];
 				if ($name === '' || $price === 0) {
 					continue;

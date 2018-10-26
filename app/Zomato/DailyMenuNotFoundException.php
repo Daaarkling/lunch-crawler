@@ -4,6 +4,7 @@ namespace LunchCrawler\Zomato;
 
 use Exception;
 use Throwable;
+use function sprintf;
 
 class DailyMenuNotFoundException extends Exception
 {

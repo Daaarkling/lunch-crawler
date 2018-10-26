@@ -4,6 +4,7 @@ namespace LunchCrawler\Restaurant;
 
 use Exception;
 use Throwable;
+use function sprintf;
 
 class RestaurantEmptyMenuException extends Exception
 {

@@ -3,6 +3,7 @@
 namespace LunchCrawler\Restaurant;
 
 use Nette\Utils\Strings;
+use const PHP_SAPI;
 use function utf8_decode;
 
 class RestaurantFormatter

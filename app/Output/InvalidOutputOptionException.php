@@ -4,6 +4,7 @@ namespace LunchCrawler\Output;
 
 use Exception;
 use Throwable;
+use function sprintf;
 
 class InvalidOutputOptionException extends Exception
 {

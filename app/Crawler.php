@@ -6,6 +6,7 @@ use LunchCrawler\Restaurant\RestaurantEmptyMenuException;
 use LunchCrawler\Restaurant\RestaurantLoadException;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Tracy\Debugger;
+use function get_class;
 
 class Crawler
 {

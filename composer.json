@@ -29,8 +29,8 @@
 		"smalot/pdfparser": "dev-master"
 	},
 	"require-dev": {
-		"consistence/coding-standard": "^3.0",
-		"slevomat/coding-standard": "^4.0",
+		"consistence/coding-standard": "^3.5",
+		"slevomat/coding-standard": "^4.8.5",
 		"phing/phing": "^2.16",
 		"phpstan/phpstan": "^0.9",
 		"phpstan/phpstan-strict-rules": "^0.9",

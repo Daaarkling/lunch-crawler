@@ -4,6 +4,8 @@ namespace LunchCrawler\Output;
 
 use LunchCrawler\Result;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use function sprintf;
+use function str_repeat;
 
 class ConsoleOutputHandler implements OutputHandler
 {

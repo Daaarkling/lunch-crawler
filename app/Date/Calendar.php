@@ -3,6 +3,8 @@
 namespace LunchCrawler\Date;
 
 use DateTimeImmutable;
+use function in_array;
+use function sprintf;
 
 class Calendar
 {

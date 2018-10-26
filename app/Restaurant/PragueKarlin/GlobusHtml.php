@@ -13,7 +13,10 @@ use Nette\Utils\Strings;
 use Throwable;
 use const FILTER_SANITIZE_NUMBER_INT;
 use function filter_var;
+use function sprintf;
 use function str_replace;
+use function substr;
+use function utf8_decode;
 
 final class GlobusHtml extends HtmlParseRestaurantLoader
 {

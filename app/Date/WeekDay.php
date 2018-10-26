@@ -2,6 +2,8 @@
 
 namespace LunchCrawler\Date;
 
+use function date;
+
 class WeekDay
 {
 

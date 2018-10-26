@@ -2,6 +2,8 @@
 
 namespace LunchCrawler;
 
+use function count;
+
 class Result
 {
 

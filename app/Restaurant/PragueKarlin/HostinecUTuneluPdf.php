@@ -7,6 +7,12 @@ use LunchCrawler\Restaurant\Menu\Dish;
 use LunchCrawler\Restaurant\Menu\Menu;
 use LunchCrawler\Restaurant\PdfRestaurantLoader;
 use Nette\Utils\Strings;
+use const PHP_EOL;
+use function explode;
+use function mb_strtoupper;
+use function sprintf;
+use function str_replace;
+use function trim;
 
 final class HostinecUTuneluPdf extends PdfRestaurantLoader
 {

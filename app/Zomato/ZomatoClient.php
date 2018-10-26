@@ -64,6 +64,7 @@ class ZomatoClient
 		$data = Json::decode($response->getBody()->getContents());
 
 		$possibilities = [];
+
 		foreach ($data->restaurants as $restaurant) {
 			$possibilities[] = [
 				'id' => $restaurant->restaurant->id,

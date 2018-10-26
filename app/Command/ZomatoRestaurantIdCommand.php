@@ -52,8 +52,10 @@ class ZomatoRestaurantIdCommand extends Command
 		$io = new SymfonyStyle($input, $output);
 
 		$cityOption = (int) $input->getOption(self::OPTION_CITY);
+
 		if ($cityOption <= 0) {
 			$io->error('Invalid city id');
+
 			return 2;
 		}
 
@@ -66,6 +68,7 @@ class ZomatoRestaurantIdCommand extends Command
 		];
 
 		$rows = [];
+
 		foreach ($possibilities as $possibility) {
 			$rows[] = [
 				$possibility['id'],
@@ -73,6 +76,7 @@ class ZomatoRestaurantIdCommand extends Command
 				$possibility['url'],
 			];
 		}
+
 		$io->table($headers, $rows);
 
 		return 0;

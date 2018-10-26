@@ -28,6 +28,7 @@ abstract class ZomatoRestaurantLoader implements RestaurantLoader
 
 			$soaps = [];
 			$meals = [];
+
 			foreach ($data->daily_menus as $dailyMenu) {
 				foreach ($dailyMenu->daily_menu->dishes as $rawDish) {
 
@@ -52,10 +53,8 @@ abstract class ZomatoRestaurantLoader implements RestaurantLoader
 			}
 
 			return new Restaurant($this->getName(), $menu);
-
 		} catch (RestaurantEmptyMenuException $e) {
 			throw $e;
-
 		} catch (Throwable $e) {
 			throw new RestaurantLoadException($this->getName(), $e);
 		}

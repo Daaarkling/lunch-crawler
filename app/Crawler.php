@@ -31,6 +31,7 @@ class Crawler
 
 		$successful = [];
 		$failed = [];
+
 		foreach ($restaurantsLoaders as $restaurantLoader) {
 			try {
 				$successful[] = $restaurantLoader->loadRestaurant();

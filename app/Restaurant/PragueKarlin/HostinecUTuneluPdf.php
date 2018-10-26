@@ -15,7 +15,9 @@ final class HostinecUTuneluPdf extends PdfRestaurantLoader
 	{
 		$startDay = mb_strtoupper(WeekDay::getCurrentCzechName());
 
-		$endDay = WeekDay::isFriday() ? 'NABÍDKA' : mb_strtoupper(WeekDay::getTomorrowCzechName());
+		$endDay = WeekDay::isFriday()
+			? 'NABÍDKA'
+			: mb_strtoupper(WeekDay::getTomorrowCzechName());
 
 		$pattern = sprintf('~(?<=%s)(.*)(?=%s)~isU', $startDay, $endDay);
 		$textDay = Strings::match($text, $pattern)[0];
@@ -32,6 +34,7 @@ final class HostinecUTuneluPdf extends PdfRestaurantLoader
 			if ($priceValues === null) {
 				$previousMeal = $meals[$key - 1];
 				$previousMeal->setName(sprintf('%s %s', $previousMeal->getName(), trim($row)));
+
 				continue;
 			}
 
@@ -40,6 +43,7 @@ final class HostinecUTuneluPdf extends PdfRestaurantLoader
 
 			if ($key === 0) {
 				$soaps[$key] = new Dish($name, $price);
+
 				continue;
 			}
 

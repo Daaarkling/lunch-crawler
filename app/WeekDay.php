@@ -44,6 +44,7 @@ class WeekDay
 	{
 		$current = (int) date('N');
 		$tomorrow = ($current + 1) % 7;
+
 		return self::getCzechNames()[$tomorrow];
 	}
 

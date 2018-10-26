@@ -34,7 +34,6 @@ final class Podolka extends HtmlParseRestaurantLoader
 			}
 
 			return new Restaurant(self::NAME, $menu);
-
 		} catch (RestaurantEmptyMenuException $e) {
 			throw $e;
 		} catch (Throwable $e) {

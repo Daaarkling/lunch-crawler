@@ -35,9 +35,11 @@ final class KarlinskaPivnice extends HtmlParseRestaurantLoader
 
 			$soaps = [];
 			$meals = [];
+
 			foreach ($rawDishes as $rawDish) {
 				$name = RestaurantFormatter::format($rawDish['name']);
 				$price = (int) $rawDish['price'];
+
 				if ($name === '' || $price === 0) {
 					continue;
 				}
@@ -56,7 +58,6 @@ final class KarlinskaPivnice extends HtmlParseRestaurantLoader
 			}
 
 			return new Restaurant(self::NAME, $menu);
-
 		} catch (RestaurantEmptyMenuException $e) {
 			throw $e;
 		} catch (Throwable $e) {

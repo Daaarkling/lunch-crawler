@@ -24,15 +24,16 @@ class ConsoleOutputHandler implements OutputHandler
 
 			if ($menu->hasDishes()) {
 				$this->io->section('Polévky');
+
 				foreach ($menu->getSoups() as $soup) {
 					$this->io->text(sprintf('- %s - %d Kč', $soup->getName(), $soup->getPrice()));
 				}
 
 				$this->io->section('Hlavní jídla');
+
 				foreach ($menu->getMeals() as $meal) {
 					$this->io->text(sprintf('- %s - %d Kč', $meal->getName(), $meal->getPrice()));
 				}
-
 			} elseif ($menu->hasImageUrl()) {
 				$this->io->text($menu->getImageUrl());
 

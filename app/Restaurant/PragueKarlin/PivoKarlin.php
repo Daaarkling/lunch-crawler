@@ -10,7 +10,6 @@ use LunchCrawler\Restaurant\Restaurant;
 use LunchCrawler\Restaurant\RestaurantEmptyMenuException;
 use LunchCrawler\Restaurant\RestaurantFormatter;
 use LunchCrawler\Restaurant\RestaurantLoadException;
-use Nette\Utils\Strings;
 use Throwable;
 
 final class PivoKarlin extends HtmlParseRestaurantLoader
@@ -37,16 +36,17 @@ final class PivoKarlin extends HtmlParseRestaurantLoader
 
 			$soaps = [];
 			$meals = [];
+
 			foreach ($rawDishes as $rawDish) {
 				$name = RestaurantFormatter::format($rawDish['name']);
 				$price = (int) $rawDish['price'];
+
 				if ($name === '' || $price === 0) {
 					continue;
 				}
 
 				if ($price < self::SOAP_MIN_PRICE) {
 					continue;
-
 				} elseif ($price >= self::SOAP_MIN_PRICE && $price <= self::SOAP_MAX_PRICE) {
 					$soaps[] = new Dish($name, $price);
 
@@ -62,7 +62,6 @@ final class PivoKarlin extends HtmlParseRestaurantLoader
 			}
 
 			return new Restaurant(self::NAME, $menu);
-
 		} catch (RestaurantEmptyMenuException $e) {
 			throw $e;
 		} catch (Throwable $e) {

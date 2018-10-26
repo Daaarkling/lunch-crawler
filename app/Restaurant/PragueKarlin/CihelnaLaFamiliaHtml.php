@@ -10,7 +10,6 @@ use LunchCrawler\Restaurant\Restaurant;
 use LunchCrawler\Restaurant\RestaurantEmptyMenuException;
 use LunchCrawler\Restaurant\RestaurantFormatter;
 use LunchCrawler\Restaurant\RestaurantLoadException;
-use Nette\Utils\Strings;
 use Throwable;
 
 final class CihelnaLaFamiliaHtml extends HtmlParseRestaurantLoader
@@ -48,8 +47,11 @@ final class CihelnaLaFamiliaHtml extends HtmlParseRestaurantLoader
 			/** @var string[]&string[][] $rawDishes */
 			$rawDishes = $matcher($html);
 
-			$soaps[] = new Dish(RestaurantFormatter::format($rawDishes['soap']['name']), (int) $rawDishes['soap']['price']);
 			$meals = [];
+			$soaps = [];
+
+			$soaps[] = new Dish(RestaurantFormatter::format($rawDishes['soap']['name']), (int) $rawDishes['soap']['price']);
+
 			foreach ($rawDishes['dish'] as $rawDish) {
 				$meals[] = new Dish(RestaurantFormatter::format($rawDish['name']), (int) $rawDish['price']);
 			}
@@ -61,7 +63,6 @@ final class CihelnaLaFamiliaHtml extends HtmlParseRestaurantLoader
 			}
 
 			return new Restaurant(self::NAME, $menu);
-
 		} catch (RestaurantEmptyMenuException $e) {
 			throw $e;
 		} catch (Throwable $e) {

@@ -10,7 +10,6 @@ use LunchCrawler\Restaurant\Restaurant;
 use LunchCrawler\Restaurant\RestaurantEmptyMenuException;
 use LunchCrawler\Restaurant\RestaurantFormatter;
 use LunchCrawler\Restaurant\RestaurantLoadException;
-use Nette\Utils\Strings;
 use Throwable;
 
 final class HamburkLokal extends HtmlParseRestaurantLoader
@@ -36,9 +35,11 @@ final class HamburkLokal extends HtmlParseRestaurantLoader
 
 			$soaps = [];
 			$meals = [];
+
 			foreach ($rawDishes as $rawDish) {
 				$name = RestaurantFormatter::format($rawDish['name']);
 				$price = (int) $rawDish['price'];
+
 				if ($name === '' || $price === 0) {
 					continue;
 				}
@@ -57,7 +58,6 @@ final class HamburkLokal extends HtmlParseRestaurantLoader
 			}
 
 			return new Restaurant(self::NAME, $menu);
-
 		} catch (RestaurantEmptyMenuException $e) {
 			throw $e;
 		} catch (Throwable $e) {

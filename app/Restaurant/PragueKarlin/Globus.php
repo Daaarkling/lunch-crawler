@@ -21,6 +21,7 @@ final class Globus extends ZomatoRestaurantLoader
 	public function loadRestaurant(): Restaurant
 	{
 		self::$soapLimitPrice = 36;
+
 		return parent::loadRestaurant();
 	}
 

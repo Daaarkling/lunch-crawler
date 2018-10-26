@@ -23,13 +23,10 @@ class OutputHandlerFactory
 		}
 
 		if ($option === OutputOptions::SLACK) {
-			$outputHandler = new SlackOutputHandler($this->slackClient);
-
-		} else {
-			$outputHandler = new ConsoleOutputHandler($io);
+			return new SlackOutputHandler($this->slackClient);
 		}
 
-		return $outputHandler;
+		return new ConsoleOutputHandler($io);
 	}
 
 }

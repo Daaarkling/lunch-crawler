@@ -59,8 +59,10 @@ class RunCommand extends Command
 		$io = new SymfonyStyle($input, $output);
 
 		$outputOption = $input->getOption(self::OPTION_OUTPUT);
+
 		if (!OutputOptions::isValid($outputOption)) {
 			$io->error('Output must be one of these options: ' . implode(', ', OutputOptions::OUTPUTS));
+
 			return 2;
 		}
 
@@ -85,10 +87,12 @@ class RunCommand extends Command
 			$io->error($message);
 			$io->writeln('Failed:');
 			$io->listing($result->getFailed());
+
 			return 1;
 		}
 
 		$io->success($message);
+
 		return 0;
 	}
 

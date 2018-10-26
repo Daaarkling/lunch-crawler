@@ -8,8 +8,7 @@ use Nette\DI\CompilerExtension;
 class SlackExtension extends CompilerExtension
 {
 
-	/** @var mixed[] */
-	private $defaultConfig = [
+	private const DEFAULTS = [
 		'endpoint' => null,
 		'channel' => 'obed',
 		'username' => 'LunchCrawler',
@@ -19,8 +18,9 @@ class SlackExtension extends CompilerExtension
 	public function loadConfiguration(): void
 	{
 		$builder = $this->getContainerBuilder();
-		$config = $this->validateConfig($this->defaultConfig);
+		$config = $this->validateConfig(self::DEFAULTS);
 
+		$arguments = [];
 		$arguments['endpoint'] = $config['endpoint'];
 		unset($config['endpoint']);
 		$arguments['options'] = $config;

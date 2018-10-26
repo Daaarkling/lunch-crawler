@@ -46,9 +46,12 @@ final class GlobusHtml extends HtmlParseRestaurantLoader
 			$rawDishes = $matcher($html);
 
 			[$name, $price] = $this->extractNameAndPrice($rawDishes['soap']);
-			$soaps[] = new Dish($name, $price);
 
 			$meals = [];
+			$soaps = [];
+
+			$soaps[] = new Dish($name, $price);
+
 			foreach ($rawDishes['dish'] as $rawDish) {
 				[$name, $price] = $this->extractNameAndPrice($rawDish);
 				$meals[] = new Dish($name, $price);
@@ -71,7 +74,6 @@ final class GlobusHtml extends HtmlParseRestaurantLoader
 			}
 
 			return new Restaurant(self::NAME, $menu);
-
 		} catch (RestaurantEmptyMenuException $e) {
 			throw $e;
 		} catch (Throwable $e) {

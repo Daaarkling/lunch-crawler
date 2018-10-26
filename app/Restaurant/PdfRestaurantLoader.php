@@ -30,11 +30,11 @@ abstract class PdfRestaurantLoader implements RestaurantLoader
 			}
 
 			return new Restaurant($this->getName(), $menu);
-
 		} catch (Throwable $e) {
 			Debugger::log(new RestaurantLoadException($this->getName(), $e));
 
 			$menu = Menu::createFromUrl($this->getUrlMenu());
+
 			return new Restaurant($this->getName(), $menu);
 		}
 	}

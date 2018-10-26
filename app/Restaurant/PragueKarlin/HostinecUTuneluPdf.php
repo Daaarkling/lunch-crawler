@@ -2,10 +2,10 @@
 
 namespace LunchCrawler\Restaurant\PragueKarlin;
 
+use LunchCrawler\Date\WeekDay;
 use LunchCrawler\Restaurant\Menu\Dish;
 use LunchCrawler\Restaurant\Menu\Menu;
 use LunchCrawler\Restaurant\PdfRestaurantLoader;
-use LunchCrawler\WeekDay;
 use Nette\Utils\Strings;
 
 final class HostinecUTuneluPdf extends PdfRestaurantLoader

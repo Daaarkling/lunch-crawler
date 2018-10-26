@@ -43,7 +43,7 @@ class ZomatoRestaurantIdCommand extends Command
 				'c',
 				InputOption::VALUE_REQUIRED,
 				sprintf('Set city id. Default option is Prague %d.', ZomatoClient::PRAGUE_CITY_ID),
-				ZomatoClient::PRAGUE_CITY_ID
+				(string) ZomatoClient::PRAGUE_CITY_ID
 			);
 	}
 
@@ -52,6 +52,7 @@ class ZomatoRestaurantIdCommand extends Command
 		$io = new SymfonyStyle($input, $output);
 
 		$cityOption = (int) $input->getOption(self::OPTION_CITY);
+		$search = (string) $input->getArgument(self::ARGUMENT_SEARCH);
 
 		if ($cityOption <= 0) {
 			$io->error('Invalid city id');
@@ -59,7 +60,7 @@ class ZomatoRestaurantIdCommand extends Command
 			return 2;
 		}
 
-		$possibilities = $this->zomatoClient->getRestaurantId($input->getArgument(self::ARGUMENT_SEARCH), $cityOption);
+		$possibilities = $this->zomatoClient->getRestaurantId($search, $cityOption);
 
 		$headers = [
 			'id',

@@ -58,6 +58,7 @@ class RunCommand extends Command
 	{
 		$io = new SymfonyStyle($input, $output);
 
+		/** @var string $outputOption */
 		$outputOption = $input->getOption(self::OPTION_OUTPUT);
 
 		if (!OutputOptions::isValid($outputOption)) {

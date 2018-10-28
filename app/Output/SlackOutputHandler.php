@@ -2,7 +2,7 @@
 
 namespace LunchCrawler\Output;
 
-use LunchCrawler\Result;
+use LunchCrawler\Restaurant\RestaurantLoaderResult;
 use Maknz\Slack\Client;
 use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\BufferedOutput;
@@ -27,7 +27,7 @@ class SlackOutputHandler implements OutputHandler
 		$this->io = new SymfonyStyle(new StringInput(''), $this->output);
 	}
 
-	public function handle(Result $result): void
+	public function handle(RestaurantLoaderResult $result): void
 	{
 		foreach ($result->getSuccessful() as $restaurant) {
 			$this->io->title(sprintf('*%s*', $restaurant->getName()));

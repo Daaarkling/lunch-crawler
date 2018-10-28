@@ -2,7 +2,7 @@
 
 namespace LunchCrawler\Output;
 
-use LunchCrawler\Result;
+use LunchCrawler\Restaurant\RestaurantLoaderResult;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use function sprintf;
 use function str_repeat;
@@ -18,7 +18,7 @@ class ConsoleOutputHandler implements OutputHandler
 		$this->io = $io;
 	}
 
-	public function handle(Result $result): void
+	public function handle(RestaurantLoaderResult $result): void
 	{
 		foreach ($result->getSuccessful() as $restaurant) {
 			$this->io->title($restaurant->getName());

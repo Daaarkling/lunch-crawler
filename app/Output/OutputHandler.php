@@ -2,11 +2,11 @@
 
 namespace LunchCrawler\Output;
 
-use LunchCrawler\Result;
+use LunchCrawler\Restaurant\RestaurantLoaderResult;
 
 interface OutputHandler
 {
 
-	public function handle(Result $result): void;
+	public function handle(RestaurantLoaderResult $result): void;
 
 }

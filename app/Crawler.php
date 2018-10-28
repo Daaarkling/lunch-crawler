@@ -3,6 +3,7 @@
 namespace LunchCrawler;
 
 use LunchCrawler\Restaurant\RestaurantEmptyMenuException;
+use LunchCrawler\Restaurant\RestaurantLoaderResult;
 use LunchCrawler\Restaurant\RestaurantLoadException;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Tracy\Debugger;
@@ -22,9 +23,9 @@ class Crawler
 
 	/**
 	 * @param \LunchCrawler\Restaurant\RestaurantLoader[] $restaurantsLoaders
-	 * @return \LunchCrawler\Result
+	 * @return \LunchCrawler\Restaurant\RestaurantLoaderResult
 	 */
-	public function crawl(array $restaurantsLoaders): Result
+	public function crawl(array $restaurantsLoaders): RestaurantLoaderResult
 	{
 		if ($this->progressBar !== null) {
 			$this->progressBar->start();
@@ -56,7 +57,7 @@ class Crawler
 			$this->progressBar->finish();
 		}
 
-		return new Result($successful, $failed);
+		return new RestaurantLoaderResult($successful, $failed);
 	}
 
 }

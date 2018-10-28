@@ -1,10 +1,10 @@
 <?php declare(strict_types = 1);
 
-namespace LunchCrawler;
+namespace LunchCrawler\Restaurant;
 
 use function count;
 
-class Result
+class RestaurantLoaderResult
 {
 
 	/** @var \LunchCrawler\Restaurant\Restaurant[] */

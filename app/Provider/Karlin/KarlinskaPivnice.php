@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace LunchCrawler\Restaurant\PragueKarlin;
+namespace LunchCrawler\Provider\Karlin;
 
 use Atrox\Matcher;
 use LunchCrawler\Restaurant\HtmlParseRestaurantLoader;
@@ -12,13 +12,12 @@ use LunchCrawler\Restaurant\RestaurantFormatter;
 use LunchCrawler\Restaurant\RestaurantLoadException;
 use Throwable;
 
-final class PivoKarlin extends HtmlParseRestaurantLoader
+final class KarlinskaPivnice extends HtmlParseRestaurantLoader
 {
 
-	private const SOAP_MAX_PRICE = 50;
-	private const SOAP_MIN_PRICE = 40;
-	private const MENU_URL = 'http://www.pivokarlin.cz/';
-	private const NAME = 'Pivo Karlín';
+	private const SOAP_LIMIT_PRICE = 44;
+	private const MENU_URL = 'http://www.pivnicekarlin.cz';
+	private const NAME = 'Karlínská Pivnice';
 
 	public function loadRestaurant(): Restaurant
 	{
@@ -26,9 +25,9 @@ final class PivoKarlin extends HtmlParseRestaurantLoader
 			$response = $this->httpClient->request('GET', self::MENU_URL);
 			$html = $response->getBody()->getContents();
 
-			$matcher = Matcher::multi('//div[@id="menuModala"]//div[contains(@class, "menu")]/div', [
-				'name' => './/div[contains(@class, "col-sm-10")]',
-				'price' => './/div[contains(@class, "col-sm-2")]',
+			$matcher = Matcher::multi('//div[@id="modal-lunch"]//div[contains(@class, "meal")]', [
+				'name' => './/h4',
+				'price' => './/div[3]',
 			])->fromHtml();
 
 			/** @var string[][] $rawDishes */
@@ -45,11 +44,8 @@ final class PivoKarlin extends HtmlParseRestaurantLoader
 					continue;
 				}
 
-				if ($price < self::SOAP_MIN_PRICE) {
-					continue;
-				} elseif ($price >= self::SOAP_MIN_PRICE && $price <= self::SOAP_MAX_PRICE) {
+				if ($price < self::SOAP_LIMIT_PRICE) {
 					$soaps[] = new Dish($name, $price);
-
 				} else {
 					$meals[] = new Dish($name, $price);
 				}

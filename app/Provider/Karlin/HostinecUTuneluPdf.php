@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace LunchCrawler\Restaurant\PragueKarlin;
+namespace LunchCrawler\Provider\Karlin;
 
 use LunchCrawler\Date\WeekDay;
 use LunchCrawler\Restaurant\Menu\Dish;

@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace LunchCrawler\Restaurant\PragueKarlin;
+namespace LunchCrawler\Provider\Karlin;
 
 use Atrox\Matcher;
 use LunchCrawler\Restaurant\HtmlParseRestaurantLoader;
@@ -12,12 +12,11 @@ use LunchCrawler\Restaurant\RestaurantFormatter;
 use LunchCrawler\Restaurant\RestaurantLoadException;
 use Throwable;
 
-final class HamburkLokal extends HtmlParseRestaurantLoader
+final class CihelnaLaFamiliaHtml extends HtmlParseRestaurantLoader
 {
 
-	private const SOAP_LIMIT_PRICE = 50;
-	private const MENU_URL = 'http://lokal-hamburk.ambi.cz/cz/';
-	private const NAME = 'Hamburk Lokál';
+	private const MENU_URL = 'http://www.cihelna-lafamilia.cz/';
+	private const NAME = 'Cihelna La Familia';
 
 	public function loadRestaurant(): Restaurant
 	{
@@ -25,30 +24,36 @@ final class HamburkLokal extends HtmlParseRestaurantLoader
 			$response = $this->httpClient->request('GET', self::MENU_URL);
 			$html = $response->getBody()->getContents();
 
-			$matcher = Matcher::multi('//div[@id="lunch-menu"]/div[@class="header-part"]/span[contains(text(), "dnes")]/parent::div/parent::div//img[contains(@alt, "Hamburk")]/ancestor::div[contains(@class, "boxx")]//tr[not(@class)]', [
-				'name' => './td[1]',
-				'price' => './td[2]',
-			])->fromHtml();
+			$matcher = Matcher::single(
+				'//div[@id="right"]//table',
+				[
+					'soap' => Matcher::single(
+						'.//tr[1]',
+						[
+							'name' => './/div[@class="ingredience"]',
+							'price' => './/td[@class="cena"]',
+						]
+					),
+					'dish' => Matcher::multi(
+						'.//tr[position()>1]',
+						[
+							'name' => './/div[@class="ingredience"]',
+							'price' => './/td[@class="cena"]',
+						]
+					),
+				]
+			)->fromHtml();
 
-			/** @var string[][] $rawDishes */
+			/** @var string[]&string[][] $rawDishes */
 			$rawDishes = $matcher($html);
 
-			$soaps = [];
 			$meals = [];
+			$soaps = [];
 
-			foreach ($rawDishes as $rawDish) {
-				$name = RestaurantFormatter::format($rawDish['name']);
-				$price = (int) $rawDish['price'];
+			$soaps[] = new Dish(RestaurantFormatter::format($rawDishes['soap']['name']), (int) $rawDishes['soap']['price']);
 
-				if ($name === '' || $price === 0) {
-					continue;
-				}
-
-				if ($price < self::SOAP_LIMIT_PRICE) {
-					$soaps[] = new Dish($name, $price);
-				} else {
-					$meals[] = new Dish($name, $price);
-				}
+			foreach ($rawDishes['dish'] as $rawDish) {
+				$meals[] = new Dish(RestaurantFormatter::format($rawDish['name']), (int) $rawDish['price']);
 			}
 
 			$menu = Menu::createFromDishes($soaps, $meals);

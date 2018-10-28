@@ -1,11 +1,11 @@
 restaurants:
-	- LunchCrawler\Restaurant\PragueKarlin\CihelnaLaFamiliaHtml
-	- LunchCrawler\Restaurant\PragueKarlin\HamburkLokal
-	#- LunchCrawler\Restaurant\PragueKarlin\HostinecUTuneluZomato
-	- LunchCrawler\Restaurant\PragueKarlin\HostinecUTuneluPdf
-	#- LunchCrawler\Restaurant\PragueKarlin\Globus
-	- LunchCrawler\Restaurant\PragueKarlin\GlobusHtml
-	- LunchCrawler\Restaurant\PragueKarlin\KarlinskaPivnice
-	- LunchCrawler\Restaurant\PragueKarlin\PivoKarlin
-	- LunchCrawler\Restaurant\PragueKarlin\PetersBurgerPub
-	- LunchCrawler\Restaurant\PragueKarlin\Podolka
+	- LunchCrawler\Provider\Karlin\CihelnaLaFamiliaHtml
+	- LunchCrawler\Provider\Karlin\HamburkLokal
+	#- LunchCrawler\Provider\Karlin\HostinecUTuneluZomato
+	- LunchCrawler\Provider\Karlin\HostinecUTuneluPdf
+	#- LunchCrawler\Provider\Karlin\Globus
+	- LunchCrawler\Provider\Karlin\GlobusHtml
+	- LunchCrawler\Provider\Karlin\KarlinskaPivnice
+	- LunchCrawler\Provider\Karlin\PivoKarlin
+	- LunchCrawler\Provider\Karlin\PetersBurgerPub
+	- LunchCrawler\Provider\Karlin\Podolka

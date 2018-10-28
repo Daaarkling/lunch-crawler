@@ -16,25 +16,24 @@
 	},
 	"require": {
 		"php": ">=7.2",
-		"nette/robot-loader": "^3.1",
-		"atrox/matcher": "^1.1",
-		"symfony/console": "^4.1",
-		"guzzlehttp/guzzle": "^6.3",
-		"nette/utils": "^3.0",
-		"tracy/tracy": "^2.5",
-		"alek13/slack": "^2.0",
-		"nette/di": "^3.0",
-		"nette/bootstrap": "^3.0",
-		"nette/http": "^3.0",
-		"smalot/pdfparser": "dev-master"
+	 	"alek13/slack": "^1.10",
+	 	"atrox/matcher": "^1.1",
+	 	"guzzlehttp/guzzle": "^6.3",
+	 	"nette/bootstrap": "^2.4",
+	 	"nette/di": "^2.4",
+	 	"nette/http": "^2.4",
+	 	"nette/robot-loader": "^3.1",
+	 	"nette/utils": "^2.5",
+	 	"smalot/pdfparser": "^0.13",
+	 	"symfony/console": "^4.1",
+	 	"tracy/tracy": "^2.5"
 	},
 	"require-dev": {
 		"consistence/coding-standard": "^3.5",
-		"slevomat/coding-standard": "^4.8.5",
-		"phing/phing": "^2.16",
-		"phpstan/phpstan": "^0.10",
-		"phpstan/phpstan-strict-rules": "^0.10",
-		"jakub-onderka/php-parallel-lint": "^1.0"
-	},
-	"minimum-stability": "dev"
+	 	"jakub-onderka/php-parallel-lint": "^1.0",
+	 	"phing/phing": "^2.16",
+	 	"phpstan/phpstan": "^0.10",
+	 	"phpstan/phpstan-strict-rules": "^0.10",
+	 	"slevomat/coding-standard": "^4.8.5"
+	}
 }

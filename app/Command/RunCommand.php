@@ -3,8 +3,11 @@
 namespace LunchCrawler\Command;
 
 use DateTimeImmutable;
-use LunchCrawler\Crawler;
+use Dogma\Geolocation\Position;
+use LunchCrawler\Crawler\CrawlerBuilder;
 use LunchCrawler\Date\Calendar;
+use LunchCrawler\Distance\Calculator\StraightLineDistanceCalculator;
+use LunchCrawler\Distance\DistanceFacade;
 use LunchCrawler\Output\OutputHandlerFactory;
 use LunchCrawler\Output\OutputOption;
 use LunchCrawler\Restaurant\RestaurantLoaderCollection;
@@ -21,11 +24,16 @@ class RunCommand extends Command
 {
 
 	private const NAME = 'run';
+
 	private const OPTION_OUTPUT = 'output';
 	private const OPTION_CALENDAR = 'calendar';
+	private const OPTION_DISTANCE = 'distance';
 
-	/** @var \LunchCrawler\Crawler */
-	private $crawler;
+	/** @var \Dogma\Geolocation\Position */
+	private $startPosition;
+
+	/** @var \LunchCrawler\Distance\DistanceFacade */
+	private $distanceFacade;
 
 	/** @var \LunchCrawler\Restaurant\RestaurantLoaderCollection */
 	private $restaurantLoaderCollection;
@@ -36,18 +44,25 @@ class RunCommand extends Command
 	/** @var \LunchCrawler\Date\Calendar */
 	private $calendar;
 
+	/** @var \LunchCrawler\Distance\Calculator\StraightLineDistanceCalculator */
+	private $straightLineDistanceCalculator;
+
 	public function __construct(
-		Crawler $crawler,
+		Position $startPosition,
+		DistanceFacade $distanceFacade,
 		RestaurantLoaderCollection $restaurantLoaderCollection,
 		OutputHandlerFactory $outputHandlerFactory,
-		Calendar $calendar
+		Calendar $calendar,
+		StraightLineDistanceCalculator $straightLineDistanceCalculator
 	)
 	{
 		parent::__construct();
-		$this->crawler = $crawler;
+		$this->startPosition = $startPosition;
+		$this->distanceFacade = $distanceFacade;
 		$this->restaurantLoaderCollection = $restaurantLoaderCollection;
 		$this->outputHandlerFactory = $outputHandlerFactory;
 		$this->calendar = $calendar;
+		$this->straightLineDistanceCalculator = $straightLineDistanceCalculator;
 	}
 
 
@@ -66,11 +81,21 @@ class RunCommand extends Command
 				'c',
 				InputOption::VALUE_NONE,
 				'Crawl only during work days and also skip czech holidays.'
+			)->addOption(
+				self::OPTION_DISTANCE,
+				'd',
+				InputOption::VALUE_NONE,
+				'Add distance information to restaurants.'
 			);
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output): int
 	{
+		$this->straightLineDistanceCalculator->calculateDistance(
+			new Position(50.504678, 16.008652),
+			new Position(50.507906, 16.004988)
+		);
+
 		/** @var bool $isCalendar */
 		$isCalendar = $input->getOption(self::OPTION_CALENDAR);
 
@@ -85,15 +110,22 @@ class RunCommand extends Command
 
 		if (!OutputOption::isValid($outputOption)) {
 			$io->error('Output must be one of these options: ' . implode(', ', OutputOption::getAllowedValues()));
-
 			return 2;
 		}
 		$outputOption = OutputOption::get($outputOption);
 
+		/** @var bool $enableDistance */
+		$enableDistance = $input->getOption(self::OPTION_DISTANCE);
+
 		$progressBar = new ProgressBar($output, $this->restaurantLoaderCollection->getCount());
 
-		$this->crawler->setProgressBar($progressBar);
-		$result = $this->crawler->crawl($this->restaurantLoaderCollection->getRestaurantLoaders());
+		$crawlerBuilder = new CrawlerBuilder();
+		$crawlerBuilder->setProgressBar($progressBar);
+		if ($enableDistance) {
+			$crawlerBuilder->enableDistance($this->startPosition, $this->distanceFacade);
+		}
+		$crawler = $crawlerBuilder->build();
+		$result = $crawler->crawl($this->restaurantLoaderCollection->getRestaurantLoaders());
 
 		if ($result->hasSuccessful()) {
 			$outputHandler = $this->outputHandlerFactory->create($outputOption);
@@ -111,12 +143,10 @@ class RunCommand extends Command
 			$io->error($message);
 			$io->writeln('Failed:');
 			$io->listing($result->getFailed());
-
 			return 1;
 		}
 
 		$io->success($message);
-
 		return 0;
 	}
 

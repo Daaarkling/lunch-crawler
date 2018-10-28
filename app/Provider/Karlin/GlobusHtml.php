@@ -3,6 +3,7 @@
 namespace LunchCrawler\Provider\Karlin;
 
 use Atrox\Matcher;
+use Dogma\Geolocation\Position;
 use LunchCrawler\Restaurant\HtmlParseRestaurantLoader;
 use LunchCrawler\Restaurant\Menu\Dish;
 use LunchCrawler\Restaurant\Menu\Menu;
@@ -23,6 +24,8 @@ final class GlobusHtml extends HtmlParseRestaurantLoader
 
 	private const MENU_URL = 'http://restauraceglobus.cz/poledni-menu/';
 	private const NAME = 'Restaurace Globus';
+	private const LAT = 50.0907588;
+	private const LNG = 14.4352815;
 
 	public function loadRestaurant(): Restaurant
 	{
@@ -76,7 +79,7 @@ final class GlobusHtml extends HtmlParseRestaurantLoader
 				throw new RestaurantEmptyMenuException(self::NAME);
 			}
 
-			return new Restaurant(self::NAME, $menu);
+			return new Restaurant(self::NAME, $menu, new Position(self::LAT, self::LNG));
 		} catch (RestaurantEmptyMenuException $e) {
 			throw $e;
 		} catch (Throwable $e) {

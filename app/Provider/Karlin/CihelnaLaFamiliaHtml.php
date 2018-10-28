@@ -3,6 +3,7 @@
 namespace LunchCrawler\Provider\Karlin;
 
 use Atrox\Matcher;
+use Dogma\Geolocation\Position;
 use LunchCrawler\Restaurant\HtmlParseRestaurantLoader;
 use LunchCrawler\Restaurant\Menu\Dish;
 use LunchCrawler\Restaurant\Menu\Menu;
@@ -16,6 +17,8 @@ final class CihelnaLaFamiliaHtml extends HtmlParseRestaurantLoader
 
 	private const MENU_URL = 'http://www.cihelna-lafamilia.cz/';
 	private const NAME = 'Cihelna La Familia';
+	private const LAT = 50.0919221;
+	private const LNG = 14.4468747;
 
 	public function loadRestaurant(): Restaurant
 	{
@@ -61,7 +64,7 @@ final class CihelnaLaFamiliaHtml extends HtmlParseRestaurantLoader
 				throw new RestaurantEmptyMenuException(self::NAME);
 			}
 
-			return new Restaurant(self::NAME, $menu);
+			return new Restaurant(self::NAME, $menu, new Position(self::LAT, self::LNG));
 		} catch (RestaurantEmptyMenuException $e) {
 			throw $e;
 		} catch (Throwable $e) {

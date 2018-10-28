@@ -9,6 +9,10 @@ parameters:
 		endpoint: ""
 		channel: ""
 
+	startPosition:
+		latitude: 50.0920809
+		longitude: 14.4578808
+
 	wwwSecret: ""
 
 	zomatoUserKey: ""
@@ -16,8 +20,8 @@ parameters:
 
 services:
 	- GuzzleHttp\Client
-	- LunchCrawler\Crawler
 	- LunchCrawler\Date\Calendar
+	- LunchCrawler\Distance\Calculator\StraightLineDistanceCalculator
 	- LunchCrawler\Output\ConsoleOutputHandler
 	- LunchCrawler\Output\OutputHandlerFactory
 	- LunchCrawler\Output\Formatter\SymfonyIOResultFormatter
@@ -25,8 +29,20 @@ services:
 	- LunchCrawler\Restaurant\RestaurantFormatter
 	- Smalot\PdfParser\Parser
 
+	googleApiDistanceCalculator:
+		factory: LunchCrawler\Distance\Calculator\GoogleApiDistanceCalculator
+		autowired: false
+	straightLineDistanceCalculator:
+		factory: LunchCrawler\Distance\Calculator\StraightLineDistanceCalculator
+		autowired: false
 
-	runCommand: LunchCrawler\Command\RunCommand
+	calculationDistanceFacade:
+		factory: LunchCrawler\Distance\CalculationDistanceFacade(@googleApiDistanceCalculator, @straightLineDistanceCalculator)
+		autowired: false
+	cacheDistanceFacade: LunchCrawler\Distance\CacheDistanceFacade(@calculationDistanceFacade)
+
+
+	runCommand: LunchCrawler\Command\RunCommand(Dogma\Geolocation\Position(%startPosition.latitude%, %startPosition.longitude%))
 	zomatoRestaurantIdCommand: LunchCrawler\Command\ZomatoRestaurantIdCommand
 	application:
 		factory: Symfony\Component\Console\Application
@@ -36,9 +52,14 @@ services:
 
 
 extensions:
+	googleDistanceApi: LunchCrawler\Extension\GoogleDistanceApiExtension
 	restaurants: LunchCrawler\Extension\RestaurantExtension
 	slack: LunchCrawler\Extension\SlackExtension
 	zomato: Darkling\ZomatoClient\ZomatoExtension
+
+
+googleDistanceApi:
+	apiKey: %googleApiKey%
 
 
 slack:

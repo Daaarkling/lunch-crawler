@@ -3,6 +3,7 @@
 namespace LunchCrawler\Provider\Karlin;
 
 use Atrox\Matcher;
+use Dogma\Geolocation\Position;
 use LunchCrawler\Restaurant\HtmlParseRestaurantLoader;
 use LunchCrawler\Restaurant\Menu\Dish;
 use LunchCrawler\Restaurant\Menu\Menu;
@@ -17,6 +18,8 @@ final class HamburkLokal extends HtmlParseRestaurantLoader
 	private const SOAP_LIMIT_PRICE = 50;
 	private const MENU_URL = 'http://lokal-hamburk.ambi.cz/cz/';
 	private const NAME = 'Hamburk Lokál';
+	private const LAT = 50.093192;
+	private const LNG = 14.4446153;
 
 	public function loadRestaurant(): Restaurant
 	{
@@ -56,7 +59,7 @@ final class HamburkLokal extends HtmlParseRestaurantLoader
 				throw new RestaurantEmptyMenuException(self::NAME);
 			}
 
-			return new Restaurant(self::NAME, $menu);
+			return new Restaurant(self::NAME, $menu, new Position(self::LAT, self::LNG));
 		} catch (RestaurantEmptyMenuException $e) {
 			throw $e;
 		} catch (Throwable $e) {

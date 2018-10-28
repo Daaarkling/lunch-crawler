@@ -1,7 +1,9 @@
 <?php declare(strict_types = 1);
 
-namespace LunchCrawler;
+namespace LunchCrawler\Crawler;
 
+use Dogma\Geolocation\Position;
+use LunchCrawler\Distance\DistanceFacade;
 use LunchCrawler\Restaurant\RestaurantEmptyMenuException;
 use LunchCrawler\Restaurant\RestaurantLoaderResult;
 use LunchCrawler\Restaurant\RestaurantLoadException;
@@ -15,10 +17,21 @@ class Crawler
 	/** @var \Symfony\Component\Console\Helper\ProgressBar|null */
 	private $progressBar;
 
-	public function setProgressBar(ProgressBar $progressBar): void
+	/** @var \Dogma\Geolocation\Position|null */
+	private $startPosition;
+
+	/** @var \LunchCrawler\Distance\DistanceFacade|null */
+	private $distanceFacade;
+
+	public function __construct(
+		?ProgressBar $progressBar,
+		?Position $startPosition,
+		?DistanceFacade $distanceFacade
+	)
 	{
-		$progressBar->setFormat('debug');
 		$this->progressBar = $progressBar;
+		$this->startPosition = $startPosition;
+		$this->distanceFacade = $distanceFacade;
 	}
 
 	/**
@@ -36,8 +49,12 @@ class Crawler
 
 		foreach ($restaurantsLoaders as $restaurantLoader) {
 			try {
-				$successful[] = $restaurantLoader->loadRestaurant();
+				$successful[] = $restaurant = $restaurantLoader->loadRestaurant();
 
+				if ($this->startPosition !== null && $this->distanceFacade !== null) {
+					$distance = $this->distanceFacade->getDistance($this->startPosition, $restaurant);
+					$restaurant->setDistance($distance);
+				}
 			} catch (RestaurantEmptyMenuException $e) {
 				Debugger::log($e);
 				$failed[] = get_class($restaurantLoader);
@@ -45,7 +62,6 @@ class Crawler
 			} catch (RestaurantLoadException $e) {
 				Debugger::log($e);
 				$failed[] = get_class($restaurantLoader);
-
 			}
 
 			if ($this->progressBar !== null) {

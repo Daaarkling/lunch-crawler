@@ -2,6 +2,7 @@
 
 namespace LunchCrawler\Restaurant;
 
+use Dogma\Geolocation\Position;
 use LunchCrawler\Restaurant\Menu\Menu;
 use Smalot\PdfParser\Parser;
 use Throwable;
@@ -28,15 +29,13 @@ abstract class PdfRestaurantLoader implements RestaurantLoader
 			if ($menu->isEmpty()) {
 				$menu = Menu::createFromUrl($this->getUrlMenu());
 			}
-
-			return new Restaurant($this->getName(), $menu);
 		} catch (Throwable $e) {
 			Debugger::log(new RestaurantLoadException($this->getName(), $e));
 
 			$menu = Menu::createFromUrl($this->getUrlMenu());
-
-			return new Restaurant($this->getName(), $menu);
 		}
+
+		return new Restaurant($this->getName(), $menu, $this->getPosition());
 	}
 
 	abstract public function loadMenu(string $text): Menu;
@@ -44,5 +43,7 @@ abstract class PdfRestaurantLoader implements RestaurantLoader
 	abstract public function getName(): string;
 
 	abstract public function getUrlMenu(): string;
+
+	abstract public function getPosition(): Position;
 
 }

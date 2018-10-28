@@ -3,6 +3,7 @@
 namespace LunchCrawler\Provider\Karlin;
 
 use Atrox\Matcher;
+use Dogma\Geolocation\Position;
 use LunchCrawler\Restaurant\HtmlParseRestaurantLoader;
 use LunchCrawler\Restaurant\Menu\Dish;
 use LunchCrawler\Restaurant\Menu\Menu;
@@ -17,6 +18,8 @@ final class KarlinskaPivnice extends HtmlParseRestaurantLoader
 	private const SOAP_LIMIT_PRICE = 44;
 	private const MENU_URL = 'http://www.pivnicekarlin.cz';
 	private const NAME = 'Karlínská Pivnice';
+	private const LAT = 50.0926691;
+	private const LNG = 14.454926;
 
 	public function loadRestaurant(): Restaurant
 	{
@@ -56,7 +59,7 @@ final class KarlinskaPivnice extends HtmlParseRestaurantLoader
 				throw new RestaurantEmptyMenuException(self::NAME);
 			}
 
-			return new Restaurant(self::NAME, $menu);
+			return new Restaurant(self::NAME, $menu, new Position(self::LAT, self::LNG));
 		} catch (RestaurantEmptyMenuException $e) {
 			throw $e;
 		} catch (Throwable $e) {

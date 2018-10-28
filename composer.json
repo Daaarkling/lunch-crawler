@@ -21,6 +21,7 @@
 	 	"dogma/dogma": "^0.1.10",
 	 	"guzzlehttp/guzzle": "^6.3",
 	 	"nette/bootstrap": "^2.4",
+	 	"nette/caching": "^2.5",
 	 	"nette/di": "^2.4",
 	 	"nette/http": "^2.4",
 	 	"nette/robot-loader": "^3.1",

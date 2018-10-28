@@ -2,6 +2,7 @@
 
 namespace LunchCrawler\Provider\Karlin;
 
+use Dogma\Geolocation\Position;
 use LunchCrawler\Date\WeekDay;
 use LunchCrawler\Restaurant\Menu\Dish;
 use LunchCrawler\Restaurant\Menu\Menu;
@@ -16,6 +17,9 @@ use function trim;
 
 final class HostinecUTuneluPdf extends PdfRestaurantLoader
 {
+
+	private const LAT = 50.093192;
+	private const LNG = 14.4446153;
 
 	public function loadMenu(string $text): Menu
 	{
@@ -67,6 +71,11 @@ final class HostinecUTuneluPdf extends PdfRestaurantLoader
 	public function getUrlMenu(): string
 	{
 		return 'http://www.utunelu.cz/denni_menu.pdf';
+	}
+
+	public function getPosition(): Position
+	{
+		return new Position(self::LAT, self::LNG);
 	}
 
 }

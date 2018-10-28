@@ -5,6 +5,7 @@ namespace LunchCrawler\Restaurant;
 use Darkling\ZomatoClient\Request\Restaurant\DailyMenuRequest;
 use Darkling\ZomatoClient\Response\ResponseOption;
 use Darkling\ZomatoClient\ZomatoClient;
+use Dogma\Geolocation\Position;
 use LunchCrawler\Restaurant\Menu\Dish;
 use LunchCrawler\Restaurant\Menu\Menu;
 use LunchCrawler\Zomato\ZomatoRequestFailedException;
@@ -60,7 +61,7 @@ abstract class ZomatoRestaurantLoader implements RestaurantLoader
 				throw new RestaurantEmptyMenuException($this->getName());
 			}
 
-			return new Restaurant($this->getName(), $menu);
+			return new Restaurant($this->getName(), $menu, $this->getPosition());
 		} catch (RestaurantEmptyMenuException $e) {
 			throw $e;
 		} catch (Throwable $e) {
@@ -71,6 +72,8 @@ abstract class ZomatoRestaurantLoader implements RestaurantLoader
 	abstract public function getRestaurantId(): int;
 
 	abstract public function getName(): string;
+
+	abstract public function getPosition(): Position;
 
 	public function getUrlMenu(): string
 	{

@@ -13,7 +13,7 @@ class Crawler
 {
 
 	/** @var \Symfony\Component\Console\Helper\ProgressBar|null */
-	private $progressBar = null;
+	private $progressBar;
 
 	public function setProgressBar(ProgressBar $progressBar): void
 	{

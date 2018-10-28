@@ -21,7 +21,9 @@ class SlackOutputHandler extends BaseStringOutputHandler
 	public function handle(RestaurantLoaderResult $result): void
 	{
 		$toString = $this->stringResultFormatter->formatResultIntoString($result);
-		$this->client->send($toString);
+		$message = $this->client->createMessage();
+		$message->setText($toString);
+		$this->client->sendMessage($message);
 	}
 
 }

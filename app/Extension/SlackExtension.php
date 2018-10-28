@@ -23,7 +23,7 @@ class SlackExtension extends CompilerExtension
 		$arguments = [];
 		$arguments['endpoint'] = $config['endpoint'];
 		unset($config['endpoint']);
-		$arguments['options'] = $config;
+		$arguments['attributes'] = $config;
 		$arguments['guzzle'] = '@' . \GuzzleHttp\Client::class;
 
 		$builder->addDefinition($this->prefix('slackClient'))

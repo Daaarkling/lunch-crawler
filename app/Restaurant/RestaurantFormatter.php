@@ -9,16 +9,16 @@ use function utf8_decode;
 class RestaurantFormatter
 {
 
-	public static function format(string $name): string
+	public function sanitizeName(string $name): string
 	{
-		if (self::isCliMode()) {
+		if ($this->isCliMode()) {
 			return Strings::trim($name);
 		}
 
 		return Strings::trim(Strings::fixEncoding(utf8_decode($name)));
 	}
 
-	private static function isCliMode(): bool
+	private function isCliMode(): bool
 	{
 		return PHP_SAPI === 'cli';
 	}

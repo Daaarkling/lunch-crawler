@@ -8,7 +8,6 @@ use LunchCrawler\Restaurant\Menu\Dish;
 use LunchCrawler\Restaurant\Menu\Menu;
 use LunchCrawler\Restaurant\Restaurant;
 use LunchCrawler\Restaurant\RestaurantEmptyMenuException;
-use LunchCrawler\Restaurant\RestaurantFormatter;
 use LunchCrawler\Restaurant\RestaurantLoadException;
 use Throwable;
 
@@ -38,7 +37,7 @@ final class PivoKarlin extends HtmlParseRestaurantLoader
 			$meals = [];
 
 			foreach ($rawDishes as $rawDish) {
-				$name = RestaurantFormatter::format($rawDish['name']);
+				$name = $this->restaurantFormatter->sanitizeName($rawDish['name']);
 				$price = (int) $rawDish['price'];
 
 				if ($name === '' || $price === 0) {

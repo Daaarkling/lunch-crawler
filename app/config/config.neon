@@ -7,6 +7,7 @@ services:
 	- LunchCrawler\Crawler
 	- LunchCrawler\Date\Calendar
 	- LunchCrawler\Output\OutputHandlerFactory
+	- LunchCrawler\Restaurant\RestaurantFormatter
 	- Smalot\PdfParser\Parser
 
 

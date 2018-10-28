@@ -10,9 +10,13 @@ abstract class HtmlParseRestaurantLoader implements RestaurantLoader
 	/** @var \GuzzleHttp\Client */
 	protected $httpClient;
 
-	public function __construct(Client $client)
+	/** @var \LunchCrawler\Restaurant\RestaurantFormatter */
+	protected $restaurantFormatter;
+
+	public function __construct(Client $client, RestaurantFormatter $restaurantFormatter)
 	{
 		$this->httpClient = $client;
+		$this->restaurantFormatter = $restaurantFormatter;
 	}
 
 }

@@ -8,7 +8,6 @@ use LunchCrawler\Restaurant\Menu\Dish;
 use LunchCrawler\Restaurant\Menu\Menu;
 use LunchCrawler\Restaurant\Restaurant;
 use LunchCrawler\Restaurant\RestaurantEmptyMenuException;
-use LunchCrawler\Restaurant\RestaurantFormatter;
 use LunchCrawler\Restaurant\RestaurantLoadException;
 use Throwable;
 
@@ -50,10 +49,10 @@ final class CihelnaLaFamiliaHtml extends HtmlParseRestaurantLoader
 			$meals = [];
 			$soaps = [];
 
-			$soaps[] = new Dish(RestaurantFormatter::format($rawDishes['soap']['name']), (int) $rawDishes['soap']['price']);
+			$soaps[] = new Dish($this->restaurantFormatter->sanitizeName($rawDishes['soap']['name']), (int) $rawDishes['soap']['price']);
 
 			foreach ($rawDishes['dish'] as $rawDish) {
-				$meals[] = new Dish(RestaurantFormatter::format($rawDish['name']), (int) $rawDish['price']);
+				$meals[] = new Dish($this->restaurantFormatter->sanitizeName($rawDish['name']), (int) $rawDish['price']);
 			}
 
 			$menu = Menu::createFromDishes($soaps, $meals);

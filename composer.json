@@ -18,6 +18,7 @@
 		"php": ">=7.2",
 	 	"alek13/slack": "^1.10",
 	 	"atrox/matcher": "^1.1",
+	 	"dogma/dogma": "^0.1.10",
 	 	"guzzlehttp/guzzle": "^6.3",
 	 	"nette/bootstrap": "^2.4",
 	 	"nette/di": "^2.4",

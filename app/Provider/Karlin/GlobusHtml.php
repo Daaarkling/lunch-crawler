@@ -30,7 +30,7 @@ final class GlobusHtml extends HtmlParseRestaurantLoader
 			$response = $this->httpClient->request('GET', self::MENU_URL);
 			$html = $response->getBody()->getContents();
 
-			$day = date('N');
+			$day = (int) date('N');
 			$matcher = Matcher::single(
 				sprintf(
 					'//div[@id="primary"]//div[contains(@class, "vc_col-sm-6")][%d]//div[contains(@class, "wpb_text_column")][%d]',

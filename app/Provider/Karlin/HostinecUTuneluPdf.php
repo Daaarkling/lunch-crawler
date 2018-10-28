@@ -29,7 +29,7 @@ final class HostinecUTuneluPdf extends PdfRestaurantLoader
 		$textDay = Strings::match($text, $pattern)[0];
 		$normalizeTextDay = preg_replace('/[ ]{2,}|[\t]/', ' ', trim($textDay));
 
-		$rows = explode(PHP_EOL, $normalizeTextDay);
+		$rows = explode(PHP_EOL, (string) $normalizeTextDay);
 
 		$soaps = [];
 		$meals = [];

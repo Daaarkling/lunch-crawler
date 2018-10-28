@@ -52,7 +52,7 @@ class WeekDay
 
 	public static function isFriday(): bool
 	{
-		return date('N') === self::FRIDAY;
+		return (int) date('N') === self::FRIDAY;
 	}
 
 }

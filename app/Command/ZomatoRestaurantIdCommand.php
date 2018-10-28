@@ -9,6 +9,8 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use function is_numeric;
+use function is_string;
 use function sprintf;
 
 class ZomatoRestaurantIdCommand extends Command
@@ -52,11 +54,17 @@ class ZomatoRestaurantIdCommand extends Command
 	{
 		$io = new SymfonyStyle($input, $output);
 
-		$cityOption = (int) $input->getOption(self::OPTION_CITY);
-		$search = (string) $input->getArgument(self::ARGUMENT_SEARCH);
+		$cityOption = $input->getOption(self::OPTION_CITY);
+		if (!is_numeric($cityOption)) {
+			$io->error('"--city" option must be numeric.');
 
-		if ($cityOption <= 0) {
-			$io->error('Invalid city id');
+			return 2;
+		}
+		$cityOption = (int) $cityOption;
+
+		$search = $input->getArgument(self::ARGUMENT_SEARCH);
+		if (!is_string($search)) {
+			$io->error('Invalid "search" argument.');
 
 			return 2;
 		}

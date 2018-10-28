@@ -43,7 +43,7 @@ class ZomatoClient
 	/**
 	 * @param string $name
 	 * @param int $cityId
-	 * @return string[]
+	 * @return string[][]
 	 */
 	public function getRestaurantId(string $name, int $cityId = self::PRAGUE_CITY_ID): array
 	{

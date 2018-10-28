@@ -6,7 +6,10 @@ services:
 	- GuzzleHttp\Client
 	- LunchCrawler\Crawler
 	- LunchCrawler\Date\Calendar
+	- LunchCrawler\Output\ConsoleOutputHandler
 	- LunchCrawler\Output\OutputHandlerFactory
+	- LunchCrawler\Output\OutputStringFormatter
+	- LunchCrawler\Output\SlackOutputHandler
 	- LunchCrawler\Restaurant\RestaurantFormatter
 	- Smalot\PdfParser\Parser
 

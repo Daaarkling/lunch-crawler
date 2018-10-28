@@ -2,60 +2,26 @@
 
 namespace LunchCrawler\Output;
 
+use LunchCrawler\Output\Formatter\StringResultFormatter;
 use LunchCrawler\Restaurant\RestaurantLoaderResult;
 use Maknz\Slack\Client;
-use Symfony\Component\Console\Input\StringInput;
-use Symfony\Component\Console\Output\BufferedOutput;
-use Symfony\Component\Console\Style\SymfonyStyle;
 
-class SlackOutputHandler implements OutputHandler
+class SlackOutputHandler extends BaseStringOutputHandler
 {
-
-	/** @var \Symfony\Component\Console\Style\SymfonyStyle */
-	private $io;
-
-	/** @var \Symfony\Component\Console\Output\BufferedOutput */
-	private $output;
 
 	/** @var \Maknz\Slack\Client */
 	private $client;
 
-	public function __construct(Client $client)
+	public function __construct(StringResultFormatter $stringResultFormatter, Client $client)
 	{
+		parent::__construct($stringResultFormatter);
 		$this->client = $client;
-		$this->output = new BufferedOutput();
-		$this->io = new SymfonyStyle(new StringInput(''), $this->output);
 	}
 
 	public function handle(RestaurantLoaderResult $result): void
 	{
-		foreach ($result->getSuccessful() as $restaurant) {
-			$this->io->title(sprintf('*%s*', $restaurant->getName()));
-			$menu = $restaurant->getMenu();
-
-			if ($menu->hasDishes()) {
-				$this->io->section('*Polévky*');
-
-				foreach ($menu->getSoups() as $soup) {
-					$this->io->text(sprintf('- %s - %d Kč', $soup->getName(), $soup->getPrice()));
-				}
-
-				$this->io->section('*Hlavní jídla*');
-
-				foreach ($menu->getMeals() as $meal) {
-					$this->io->text(sprintf('- %s - %d Kč', $meal->getName(), $meal->getPrice()));
-				}
-			} elseif ($menu->hasImageUrl()) {
-				$this->io->text($menu->getImageUrl());
-
-			} else {
-				$this->io->text($menu->getUrl());
-			}
-
-			$this->io->section(str_repeat(' ', 100));
-		}
-
-		$this->client->send($this->output->fetch());
+		$toString = $this->stringResultFormatter->formatResultIntoString($result);
+		$this->client->send($toString);
 	}
 
 }

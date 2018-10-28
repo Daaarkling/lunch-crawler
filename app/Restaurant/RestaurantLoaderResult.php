@@ -64,4 +64,9 @@ class RestaurantLoaderResult
 		return count($this->failed);
 	}
 
+	public function isEmpty(): bool
+	{
+		return $this->getTotalCount() === 0;
+	}
+
 }

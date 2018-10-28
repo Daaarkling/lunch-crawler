@@ -2,31 +2,35 @@
 
 namespace LunchCrawler\Output;
 
-use Maknz\Slack\Client;
-use Symfony\Component\Console\Style\SymfonyStyle;
-
 class OutputHandlerFactory
 {
 
-	/** @var \Maknz\Slack\Client */
-	private $slackClient;
+	/** @var \LunchCrawler\Output\SlackOutputHandler */
+	private $slackOutputHandler;
 
-	public function __construct(Client $slackClient)
+	/** @var \LunchCrawler\Output\ConsoleOutputHandler */
+	private $consoleOutputHandler;
+
+	public function __construct(
+		ConsoleOutputHandler $consoleOutputHandler,
+		SlackOutputHandler $slackOutputHandler
+	)
 	{
-		$this->slackClient = $slackClient;
+		$this->slackOutputHandler = $slackOutputHandler;
+		$this->consoleOutputHandler = $consoleOutputHandler;
 	}
 
-	public function create(string $option, SymfonyStyle $io): OutputHandler
+	public function create(string $option): OutputHandler
 	{
 		if (!OutputOptions::isValid($option)) {
 			throw new InvalidOutputOptionException($option);
 		}
 
 		if ($option === OutputOptions::SLACK) {
-			return new SlackOutputHandler($this->slackClient);
+			return $this->slackOutputHandler;
 		}
 
-		return new ConsoleOutputHandler($io);
+		return $this->consoleOutputHandler;
 	}
 
 }

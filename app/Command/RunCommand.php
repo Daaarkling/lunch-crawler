@@ -95,7 +95,7 @@ class RunCommand extends Command
 		$result = $this->crawler->crawl($this->restaurantLoaderCollection->getRestaurants());
 
 		if ($result->hasSuccessful()) {
-			$outputHandler = $this->outputHandlerFactory->create($outputOption, $io);
+			$outputHandler = $this->outputHandlerFactory->create($outputOption);
 			$outputHandler->handle($result);
 		}
 

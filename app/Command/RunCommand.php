@@ -6,7 +6,7 @@ use DateTimeImmutable;
 use LunchCrawler\Crawler;
 use LunchCrawler\Date\Calendar;
 use LunchCrawler\Output\OutputHandlerFactory;
-use LunchCrawler\Output\OutputOptions;
+use LunchCrawler\Output\OutputOption;
 use LunchCrawler\Restaurant\RestaurantLoaderCollection;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
@@ -59,8 +59,8 @@ class RunCommand extends Command
 				self::OPTION_OUTPUT,
 				'o',
 				InputOption::VALUE_REQUIRED,
-				'Set output. You can choose from several choices: ' . implode(', ', OutputOptions::OUTPUTS) . '.',
-				OutputOptions::CONSOLE
+				'Set output. You can choose from several choices: ' . implode(', ', OutputOption::getAllowedValues()) . '.',
+				OutputOption::CONSOLE
 			)->addOption(
 				self::OPTION_CALENDAR,
 				'c',
@@ -83,11 +83,12 @@ class RunCommand extends Command
 		/** @var string $outputOption */
 		$outputOption = $input->getOption(self::OPTION_OUTPUT);
 
-		if (!OutputOptions::isValid($outputOption)) {
-			$io->error('Output must be one of these options: ' . implode(', ', OutputOptions::OUTPUTS));
+		if (!OutputOption::isValid($outputOption)) {
+			$io->error('Output must be one of these options: ' . implode(', ', OutputOption::getAllowedValues()));
 
 			return 2;
 		}
+		$outputOption = OutputOption::get($outputOption);
 
 		$progressBar = new ProgressBar($output, $this->restaurantLoaderCollection->getCount());
 

@@ -20,17 +20,17 @@ class OutputHandlerFactory
 		$this->consoleOutputHandler = $consoleOutputHandler;
 	}
 
-	public function create(string $option): OutputHandler
+	public function create(OutputOption $outputOption): OutputHandler
 	{
-		if (!OutputOptions::isValid($option)) {
-			throw new InvalidOutputOptionException($option);
-		}
-
-		if ($option === OutputOptions::SLACK) {
+		if ($outputOption->equals(OutputOption::SLACK)) {
 			return $this->slackOutputHandler;
 		}
 
-		return $this->consoleOutputHandler;
+		if ($outputOption->equals(OutputOption::CONSOLE)) {
+			return $this->consoleOutputHandler;
+		}
+
+		throw new OutputOptionNotSupportedException($outputOption);
 	}
 
 }

@@ -6,32 +6,24 @@ class RestaurantLoaderCollection
 {
 
 	/** @var \LunchCrawler\Restaurant\RestaurantLoader[] */
-	private $restaurants;
+	private $restaurantLoaders;
 
-	public function addRestaurant(RestaurantLoader $restaurant): void
+	public function addRestaurantLoader(RestaurantLoader $restaurant): void
 	{
-		$this->restaurants[] = $restaurant;
+		$this->restaurantLoaders[] = $restaurant;
 	}
 
 	public function getCount(): int
 	{
-		return count($this->restaurants);
+		return count($this->restaurantLoaders);
 	}
 
 	/**
 	 * @return \LunchCrawler\Restaurant\RestaurantLoader[]
 	 */
-	public function getRestaurants(): array
+	public function getRestaurantLoaders(): array
 	{
-		return $this->restaurants;
-	}
-
-	/**
-	 * @param \LunchCrawler\Restaurant\RestaurantLoader[] $restaurants
-	 */
-	public function setRestaurants(array $restaurants): void
-	{
-		$this->restaurants = $restaurants;
+		return $this->restaurantLoaders;
 	}
 
 }

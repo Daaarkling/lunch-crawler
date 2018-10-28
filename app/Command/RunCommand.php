@@ -92,7 +92,7 @@ class RunCommand extends Command
 		$progressBar = new ProgressBar($output, $this->restaurantLoaderCollection->getCount());
 
 		$this->crawler->setProgressBar($progressBar);
-		$result = $this->crawler->crawl($this->restaurantLoaderCollection->getRestaurants());
+		$result = $this->crawler->crawl($this->restaurantLoaderCollection->getRestaurantLoaders());
 
 		if ($result->hasSuccessful()) {
 			$outputHandler = $this->outputHandlerFactory->create($outputOption);

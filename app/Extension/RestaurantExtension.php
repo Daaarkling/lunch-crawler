@@ -21,7 +21,7 @@ class RestaurantExtension extends CompilerExtension
 			$builder->addDefinition($serviceName)
 				->setFactory($restaurants);
 
-			$restaurantCollection->addSetup('addRestaurant', ['@' . $serviceName]);
+			$restaurantCollection->addSetup('addRestaurantLoader', ['@' . $serviceName]);
 		}
 	}
 

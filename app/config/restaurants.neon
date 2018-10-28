@@ -1,5 +1,5 @@
 restaurants:
-	#cra	- LunchCrawler\Provider\Karlin\CihelnaLaFamiliaHtml
+	- LunchCrawler\Provider\Karlin\CihelnaLaFamiliaHtml
 	- LunchCrawler\Provider\Karlin\HamburkLokal
 	#- LunchCrawler\Provider\Karlin\HostinecUTuneluZomato
 	- LunchCrawler\Provider\Karlin\HostinecUTuneluPdf

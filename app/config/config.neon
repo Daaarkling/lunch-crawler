@@ -2,6 +2,18 @@ includes:
 	- restaurants.neon
 
 
+parameters:
+	googleApiKey: ""
+
+	slack:
+		endpoint: ""
+		channel: ""
+
+	wwwSecret: ""
+
+	zomatoUserKey: ""
+
+
 services:
 	- GuzzleHttp\Client
 	- LunchCrawler\Crawler

@@ -27,3 +27,12 @@ extensions:
 	restaurants: LunchCrawler\Extension\RestaurantExtension
 	slack: LunchCrawler\Extension\SlackExtension
 	zomato: LunchCrawler\Extension\ZomatoExtension
+
+
+slack:
+	endpoint: %slack.endpoint%
+	channel: %slack.channel%
+
+
+zomato:
+	userKey: %zomatoUserKey%

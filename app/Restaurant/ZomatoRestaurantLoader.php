@@ -2,9 +2,12 @@
 
 namespace LunchCrawler\Restaurant;
 
+use Darkling\ZomatoClient\Request\Restaurant\DailyMenuRequest;
+use Darkling\ZomatoClient\Response\ResponseOption;
+use Darkling\ZomatoClient\ZomatoClient;
 use LunchCrawler\Restaurant\Menu\Dish;
 use LunchCrawler\Restaurant\Menu\Menu;
-use LunchCrawler\Zomato\ZomatoClient;
+use LunchCrawler\Zomato\ZomatoRequestFailedException;
 use Throwable;
 
 abstract class ZomatoRestaurantLoader implements RestaurantLoader
@@ -13,7 +16,7 @@ abstract class ZomatoRestaurantLoader implements RestaurantLoader
 	/** @var int */
 	protected static $soapLimitPrice = 45;
 
-	/** @var \LunchCrawler\Zomato\ZomatoClient */
+	/** @var \Darkling\ZomatoClient\ZomatoClient */
 	protected $zomatoClient;
 
 	public function __construct(ZomatoClient $zomatoClient)
@@ -24,12 +27,17 @@ abstract class ZomatoRestaurantLoader implements RestaurantLoader
 	public function loadRestaurant(): Restaurant
 	{
 		try {
-			$data = $this->zomatoClient->getDailyMenu($this->getRestaurantId());
+			$dailyMenuRequest = new DailyMenuRequest($this->getRestaurantId());
+			$response = $this->zomatoClient->send($dailyMenuRequest, ResponseOption::get(ResponseOption::JSON_STD_CLASS));
+
+			if (!$response->isOk()) {
+				throw new ZomatoRequestFailedException($dailyMenuRequest, $response);
+			}
 
 			$soaps = [];
 			$meals = [];
 
-			foreach ($data->daily_menus as $dailyMenu) {
+			foreach ($response->getData()->daily_menus as $dailyMenu) {
 				foreach ($dailyMenu->daily_menu->dishes as $rawDish) {
 
 					$name = $rawDish->dish->name;

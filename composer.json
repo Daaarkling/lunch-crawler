@@ -27,7 +27,8 @@
 	 	"nette/utils": "^2.5",
 	 	"smalot/pdfparser": "^0.13",
 	 	"symfony/console": "^4.1",
-	 	"tracy/tracy": "^2.5"
+	 	"tracy/tracy": "^2.5",
+		"darkling/nette-zomato-client": "^0.2.0"
 	},
 	"require-dev": {
 		"consistence/coding-standard": "^3.5",

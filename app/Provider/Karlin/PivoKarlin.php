@@ -3,7 +3,6 @@
 namespace LunchCrawler\Provider\Karlin;
 
 use Atrox\Matcher;
-use function dump;
 use LunchCrawler\Restaurant\HtmlParseRestaurantLoader;
 use LunchCrawler\Restaurant\Menu\Dish;
 use LunchCrawler\Restaurant\Menu\Menu;
@@ -26,12 +25,12 @@ final class PivoKarlin extends HtmlParseRestaurantLoader
 			$response = $this->httpClient->request('GET', self::MENU_URL);
 			$html = $response->getBody()->getContents();
 
-			$matcher = Matcher::multi('//div[@id="menuModala"]//div[contains(@class, "menu")]/div', [
+			$matcher = Matcher::multi('//div[@id="menuModala"]//div[contains(@class, "carousel-item active")]//div[contains(@class, "menu")]/div', [
 				'name' => './/div[contains(@class, "col-sm-10")]',
 				'price' => './/div[contains(@class, "col-sm-2")]',
 			])->fromHtml();
 
-			/** @var string[][] $rawDishes */
+			/** @var string[][]|null[][] $rawDishes */
 			$rawDishes = $matcher($html);
 
 			$soaps = [];
@@ -43,7 +42,7 @@ final class PivoKarlin extends HtmlParseRestaurantLoader
 					continue;
 				}
 
-				$name = $this->restaurantFormatter->sanitizeName($rawDish['name']);
+				$name = $this->restaurantFormatter->sanitizeName($rawName);
 				$price = (int) $rawDish['price'];
 
 				if ($name === '' || $price === 0) {

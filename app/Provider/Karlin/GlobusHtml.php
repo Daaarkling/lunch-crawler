@@ -3,6 +3,7 @@
 namespace LunchCrawler\Provider\Karlin;
 
 use Atrox\Matcher;
+use LunchCrawler\Date\WeekDay;
 use LunchCrawler\Restaurant\HtmlParseRestaurantLoader;
 use LunchCrawler\Restaurant\Menu\Dish;
 use LunchCrawler\Restaurant\Menu\Menu;
@@ -13,7 +14,7 @@ use Nette\Utils\Strings;
 use Throwable;
 use const FILTER_SANITIZE_NUMBER_INT;
 use function filter_var;
-use function sprintf;
+use function is_int;
 use function str_replace;
 use function substr;
 use function utf8_decode;
@@ -24,50 +25,44 @@ final class GlobusHtml extends HtmlParseRestaurantLoader
 	private const MENU_URL = 'http://restauraceglobus.cz/poledni-menu/';
 	private const NAME = 'Restaurace Globus';
 
+	private const SOAP_LIMIT = 30;
+	private const MEAL_LIMIT = 80;
+
 	public function loadRestaurant(): Restaurant
 	{
 		try {
 			$response = $this->httpClient->request('GET', self::MENU_URL);
 			$html = $response->getBody()->getContents();
 
-			$day = (int) date('N');
-			$matcher = Matcher::single(
-				sprintf(
-					'//div[@id="primary"]//div[contains(@class, "vc_col-sm-6")][%d]//div[contains(@class, "wpb_text_column")][%d]',
-					$day <= 3 ? 1 : 2,
-					$day <= 3 ? $day : $day - 3
-				),
-				[
-					'soap' => './/p[2]',
-					'special1' => './/p[3]',
-					'special2' => './/p[4]',
-					'dish' => Matcher::multi('.//ol/li'),
-				]
-			)->fromHtml();
+			$matcher = Matcher::multi('//div[@id="primary"]//div[contains(@class, "entry-content")]/p')->fromHtml();
 
-			/** @var string[]&string[][] $rawDishes */
+			/** @var string[] $rawDishes */
 			$rawDishes = $matcher($html);
 
-			[$name, $price] = $this->extractNameAndPrice($rawDishes['soap']);
+			$today = WeekDay::getCurrentCzechName();
+			$tomorrow = WeekDay::getTomorrowCzechName();
 
 			$meals = [];
 			$soaps = [];
-
-			$soaps[] = new Dish($name, $price);
-
-			foreach ($rawDishes['dish'] as $rawDish) {
+			$use = false;
+			foreach ($rawDishes as $rawDish) {
 				[$name, $price] = $this->extractNameAndPrice($rawDish);
-				$meals[] = new Dish($name, $price);
-			}
 
-			if ($rawDishes['special1'] !== null && $rawDishes['special1'] !== '') {
-				[$name, $price] = $this->extractNameAndPrice($rawDishes['special1']);
-				$meals[] = new Dish($name, $price);
-			}
+				if ($name === $today) {
+					$use = true;
+				}
 
-			if ($rawDishes['special2'] !== null && $rawDishes['special2'] !== '') {
-				[$name, $price] = $this->extractNameAndPrice($rawDishes['special2']);
-				$meals[] = new Dish($name, $price);
+				if ($use && is_int($price)) {
+					if ($price > self::MEAL_LIMIT) {
+						$meals[] = new Dish($name, $price);
+					} elseif ($price > self::SOAP_LIMIT) {
+						$soaps[] = new Dish($name, $price);
+					}
+				}
+
+				if ($name === $tomorrow) {
+					break;
+				}
 			}
 
 			$menu = Menu::createFromDishes($soaps, $meals);
@@ -90,8 +85,12 @@ final class GlobusHtml extends HtmlParseRestaurantLoader
 	 */
 	private function extractNameAndPrice(string $value): array
 	{
-		$price = (int) filter_var(substr($value, -5), FILTER_SANITIZE_NUMBER_INT);
-		$name = Strings::trim(utf8_decode(str_replace($price . ',-', '', $value)));
+		$decodedValue = utf8_decode($value);
+		$decodedValue = Strings::trim(str_replace('Polévka', '', $decodedValue), ' ,-');
+
+		$price = (int) filter_var(substr($decodedValue, -5), FILTER_SANITIZE_NUMBER_INT);
+
+		$name = Strings::trim(str_replace((string) $price, '', $decodedValue));
 
 		return [$name, $price];
 	}

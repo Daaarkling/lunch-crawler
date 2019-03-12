@@ -13,6 +13,7 @@ use LunchCrawler\Restaurant\RestaurantLoadException;
 use Nette\Utils\Strings;
 use Throwable;
 use const FILTER_SANITIZE_NUMBER_INT;
+use function date;
 use function filter_var;
 use function is_int;
 use function str_replace;
@@ -34,10 +35,14 @@ final class GlobusHtml extends HtmlParseRestaurantLoader
 			$response = $this->httpClient->request('GET', self::MENU_URL);
 			$html = $response->getBody()->getContents();
 
-			$matcher = Matcher::multi('//div[@id="primary"]//div[contains(@class, "entry-content")]/p')->fromHtml();
+			$matcherPartOne = Matcher::multi('//div[@id="primary"]//div[contains(@class, "entry-content")]/p')->fromHtml();
+			$matcherPartTwo = Matcher::multi('//div[@id="primary"]//div[contains(@class, "entry-content")]/ol', [
+				'dishes' => Matcher::multi('./li'),
+			])->fromHtml();
 
 			/** @var string[] $rawDishes */
-			$rawDishes = $matcher($html);
+			$rawDishesMultiPartOne = $matcherPartOne($html);
+			$rawDishesMultiPartTwo = $matcherPartTwo($html);
 
 			$today = WeekDay::getCurrentCzechName();
 			$tomorrow = WeekDay::getTomorrowCzechName();
@@ -45,7 +50,7 @@ final class GlobusHtml extends HtmlParseRestaurantLoader
 			$meals = [];
 			$soaps = [];
 			$use = false;
-			foreach ($rawDishes as $rawDish) {
+			foreach ($rawDishesMultiPartOne as $rawDish) {
 				[$name, $price] = $this->extractNameAndPrice($rawDish);
 
 				if ($name === $today) {
@@ -63,6 +68,11 @@ final class GlobusHtml extends HtmlParseRestaurantLoader
 				if ($name === $tomorrow) {
 					break;
 				}
+			}
+
+			foreach ($rawDishesMultiPartTwo[date('N') - 1]['dishes'] as $rawDish) {
+				[$name, $price] = $this->extractNameAndPrice($rawDish);
+				$meals[] = new Dish($name, $price);
 			}
 
 			$menu = Menu::createFromDishes($soaps, $meals);
@@ -86,7 +96,7 @@ final class GlobusHtml extends HtmlParseRestaurantLoader
 	private function extractNameAndPrice(string $value): array
 	{
 		$decodedValue = utf8_decode($value);
-		$decodedValue = Strings::trim(str_replace('Polévka', '', $decodedValue), ' ,-');
+		$decodedValue = Strings::trim(str_replace('Polévka', '', $decodedValue), ' ,-–');
 
 		$price = (int) filter_var(substr($decodedValue, -5), FILTER_SANITIZE_NUMBER_INT);
 

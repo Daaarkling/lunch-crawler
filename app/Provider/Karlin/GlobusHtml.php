@@ -70,7 +70,7 @@ final class GlobusHtml extends HtmlParseRestaurantLoader
 				}
 			}
 
-			foreach ($rawDishesMultiPartTwo[date('N') - 1]['dishes'] as $rawDish) {
+			foreach ($rawDishesMultiPartTwo[(int) date('N') - 1]['dishes'] as $rawDish) {
 				[$name, $price] = $this->extractNameAndPrice($rawDish);
 				$meals[] = new Dish($name, $price);
 			}

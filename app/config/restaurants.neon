@@ -10,3 +10,4 @@ restaurants:
 	- LunchCrawler\Provider\Karlin\PivoKarlin
 	- LunchCrawler\Provider\Karlin\PetersBurgerPub
 	- LunchCrawler\Provider\Karlin\Podolka
+	- LunchCrawler\Provider\Karlin\Salanda

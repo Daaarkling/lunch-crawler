@@ -1,4 +1,5 @@
 restaurants:
+	- LunchCrawler\Provider\Karlin\Amfora
 	#- LunchCrawler\Provider\Karlin\CihelnaLaFamiliaHtml
 	- LunchCrawler\Provider\Karlin\FuturamaJidelnaHtml
 	- LunchCrawler\Provider\Karlin\HamburkLokal

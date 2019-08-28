@@ -61,6 +61,11 @@ class Menu
 		return $this->soups !== [] || $this->meals !== [];
 	}
 
+	public function hasSoaps(): bool
+	{
+		return $this->soups !== [];
+	}
+
 	public function hasImageUrl(): bool
 	{
 		return $this->imageUrl !== null;

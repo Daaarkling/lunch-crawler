@@ -6,6 +6,7 @@ use LunchCrawler\Restaurant\RestaurantLoaderResult;
 use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use function sprintf;
 
 class SymfonyIOResultFormatter implements StringResultFormatter
 {
@@ -24,10 +25,12 @@ class SymfonyIOResultFormatter implements StringResultFormatter
 			$menu = $restaurant->getMenu();
 
 			if ($menu->hasDishes()) {
-				$io->section('*Polévky*');
+				if ($menu->hasSoaps()) {
+					$io->section('*Polévky*');
 
-				foreach ($menu->getSoups() as $soup) {
-					$io->text(sprintf('- %s - %d Kč', $soup->getName(), $soup->getPrice()));
+					foreach ($menu->getSoups() as $soup) {
+						$io->text(sprintf('- %s - %d Kč', $soup->getName(), $soup->getPrice()));
+					}
 				}
 
 				$io->section('*Hlavní jídla*');

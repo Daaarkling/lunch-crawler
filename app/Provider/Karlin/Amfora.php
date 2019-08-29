@@ -10,6 +10,7 @@ use LunchCrawler\Restaurant\Menu\Menu;
 use LunchCrawler\Restaurant\Restaurant;
 use LunchCrawler\Restaurant\RestaurantEmptyMenuException;
 use LunchCrawler\Restaurant\RestaurantLoadException;
+use Nette\Utils\Strings;
 use Throwable;
 use const FILTER_SANITIZE_NUMBER_INT;
 use function date;
@@ -18,7 +19,6 @@ use function is_array;
 use function preg_replace;
 use function preg_split;
 use function sprintf;
-use function substr;
 
 final class Amfora extends HtmlParseRestaurantLoader
 {
@@ -32,7 +32,7 @@ final class Amfora extends HtmlParseRestaurantLoader
 			$response = $this->httpClient->request('GET', self::MENU_URL);
 			$html = $response->getBody()->getContents();
 
-			$date = sprintf('%s %s', substr(WeekDay::getCurrentCzechName(), 0, 2), date('d.m.'));
+			$date = sprintf('%s %s', Strings::substring(WeekDay::getCurrentCzechName(), 0, 2), date('d.m.'));
 			$matcherDishes = Matcher::multi(sprintf('//div[@id="poledni_menu"]//td[contains(text(), "%s")]/parent::tr/following-sibling::tr[position() <= 3]', $date))->fromHtml();
 			$matcherPrice = Matcher::single('//div[@id="poledni_menu"]/preceding-sibling::h2[1]')->fromHtml();
 

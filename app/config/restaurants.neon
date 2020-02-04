@@ -12,3 +12,4 @@ restaurants:
 	- LunchCrawler\Provider\Karlin\PetersBurgerPub
 	- LunchCrawler\Provider\Karlin\Podolka
 	- LunchCrawler\Provider\Karlin\Salanda
+	- LunchCrawler\Provider\Karlin\BistroYolo

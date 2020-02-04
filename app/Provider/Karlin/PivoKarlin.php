@@ -20,7 +20,7 @@ use function sprintf;
 final class PivoKarlin extends HtmlParseRestaurantLoader
 {
 
-	private const SOAP_MAX_PRICE = 50;
+	private const SOAP_MAX_PRICE = 48;
 	private const SOAP_MIN_PRICE = 40;
 	private const MEAL_MIN_PRICE = 100;
 	private const MENU_URL = 'http://www.pivokarlin.cz/';

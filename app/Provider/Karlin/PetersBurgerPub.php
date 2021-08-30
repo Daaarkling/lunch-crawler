@@ -2,19 +2,19 @@
 
 namespace LunchCrawler\Provider\Karlin;
 
-use LunchCrawler\Restaurant\ZomatoRestaurantLoader;
+use LunchCrawler\Restaurant\LinkRestaurantLoader;
 
-final class PetersBurgerPub extends ZomatoRestaurantLoader
+final class PetersBurgerPub extends LinkRestaurantLoader
 {
 
-	public function getRestaurantId(): int
+	public function getUrlMenu(): string
 	{
-		return 16506740;
+		return 'https://www.facebook.com/petersburgerpub/';
 	}
 
 	public function getName(): string
 	{
-		return 'Peter\'s Burger Pub';
+		return 'Peter\'s Pub';
 	}
 
 }

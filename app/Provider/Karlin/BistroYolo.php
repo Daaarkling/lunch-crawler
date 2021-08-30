@@ -11,6 +11,8 @@ use LunchCrawler\Restaurant\Restaurant;
 use LunchCrawler\Restaurant\RestaurantEmptyMenuException;
 use LunchCrawler\Restaurant\RestaurantLoadException;
 use Throwable;
+use function date;
+use function str_replace;
 use const FILTER_SANITIZE_NUMBER_INT;
 use function explode;
 use function filter_var;
@@ -29,24 +31,30 @@ final class BistroYolo extends HtmlParseRestaurantLoader
 			$response = $this->httpClient->request('GET', self::MENU_URL);
 			$html = $response->getBody()->getContents();
 
-			$startDay = mb_strtoupper(WeekDay::getCurrentCzechName());
-			$matcher = Matcher::multi(sprintf('//div[contains(@class, "jidelak1")]//h4[contains(text(), "%s")]/following-sibling::div[position() <= 2]', $startDay))->fromHtml();
+			$startDay = WeekDay::getCurrentCzechName() . date(' j.n.');
+			$matcherSoup = Matcher::single(sprintf('//div[contains(@class, "jidelak1")]//div[contains(text(), "%s")]', $startDay))->fromHtml();
+			$matcherMeals = Matcher::multi(sprintf('//div[contains(@class, "jidelak1")]//div[contains(text(), "%s")]/following-sibling::div[position() <= 2]', $startDay))->fromHtml();
 
-			/** @var string[] $rawDishes */
-			$rawDishes = $matcher($html);
+			/** @var string[] $rawMeals */
+			$rawMeals = $matcherMeals($html);
+			/** @var string $rawSoup */
+			$rawSoup = $matcherSoup($html);
 
 			$soaps = [];
 			$meals = [];
 
-			$parts = explode('/', $rawDishes[0]);
+			$rawSoup = trim(str_replace($startDay, '', $rawSoup));
+			$parts = explode('/', $rawSoup);
 			$name = trim($parts[0]);
 			$price = $this->extractPrice($parts[1]);
 			$soaps[] = new Dish($name, $price);
 
-			$parts = explode('/', $rawDishes[1]);
-			$name = trim($parts[0]);
-			$price = $this->extractPrice($parts[1]);
-			$meals[] = new Dish($name, $price);
+			foreach ($rawMeals as $rawMeal) {
+				$parts = explode('/', $rawMeal);
+				$name = trim($parts[0]);
+				$price = $this->extractPrice($parts[1]);
+				$meals[] = new Dish($name, $price);
+			}
 
 			$menu = Menu::createFromDishes($soaps, $meals);
 

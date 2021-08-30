@@ -34,11 +34,11 @@ final class PivoKarlin extends HtmlParseRestaurantLoader
 
 			$now = new DateTimeImmutable();
 			$czechMonth = CzechMonths::getFromDateTime($now);
-			$date = sprintf('%s. %s %s', $now->format('j'), Strings::upper($czechMonth->getGenetiv()), $now->format('Y'));
+			$date = sprintf('%s.%s %s', $now->format('j'), Strings::upper($czechMonth->getGenetiv()), $now->format('Y'));
 
-			$matcher = Matcher::multi(sprintf('//div[@id="tab-poledni-nabidka"]//div[contains(@class, "col span_12")]//div[contains(@class, "wpb_text_column wpb_content_element")]//h5[contains(text(), "%s")]/parent::div/parent::div/parent::div/div[contains(@class, "ectar_food_menu_item")]', $date), [
+			$matcher = Matcher::multi(sprintf('//h5[contains(text(), "%s")]/parent::div/parent::div/parent::div/div[contains(@class, "nectar_food_menu_item")]', $date), [
 				'name' => './/div[contains(@class, "item_name")]',
-				'price' => './/div[contains(@class, "price")]',
+				'price' => './/div[contains(@class, "item_price")]',
 			])->fromHtml();
 
 			/** @var string[][]|null[][] $rawDishes */
